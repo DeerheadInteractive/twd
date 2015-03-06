@@ -49,7 +49,7 @@ public class LevelLoader : MonoBehaviour {
 				// ------ Creating objects -------------------------
 
 				// Create floor
-				GameObject floor = Instantiate(groundObj, new Vector3(0, groundHeight, 0), Quaternion.identity) as GameObject;
+				GameObject floor = Instantiate(groundObj, new Vector3(width / 2, groundHeight, height / 2), Quaternion.identity) as GameObject;
 				floor.transform.localScale = new Vector3(width, 1, height);
 
 				Vector3[] vec3waypoints = new Vector3[-min];
