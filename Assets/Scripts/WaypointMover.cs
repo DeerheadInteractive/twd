@@ -7,14 +7,17 @@ using System.Collections;
 public class WaypointMover : MonoBehaviour {
 	public Queue waypoints;
 
-	private Vector3 destination;
+	public Vector3 destination;
+	public bool hasDestination = false;
 	private float epsilon = 0.3f;
 
 	void Start () {
-		if (waypoints == null || waypoints.Count < 1){
+		if ((waypoints == null || waypoints.Count < 1)&&!hasDestination){
 			print ("Error: Too few waypoints on start. (WaypointMover");
 		} else{
-			destination = (Vector3)(waypoints.Dequeue());
+			if (!hasDestination)
+				destination = (Vector3)(waypoints.Dequeue());
+			hasDestination = true;
 		}
 	}
 	

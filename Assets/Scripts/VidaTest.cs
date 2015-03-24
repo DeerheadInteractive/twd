@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Vida : MonoBehaviour {
+public class VidaTest : MonoBehaviour {
 	public int curHP = 1, maxHP = 1;
 	public int damage = 1;
 	public int bounty = 5;
@@ -18,6 +18,7 @@ public class Vida : MonoBehaviour {
 		//curHP = maxHP;//Can we remove this or add a tag so we can add wounded monsters?
 	}
 	void OnTriggerEnter(Collider other){
+		/** UNCOMMENT TO RESTORE
 		if (other.tag == "Boundary" || other.tag == "Tower")
 			return;
 		GameObject curObj = GetComponent<Collider>().gameObject;
@@ -31,6 +32,7 @@ public class Vida : MonoBehaviour {
 		if (otherDestroyed && thisDestroyed){
 			// this is here to remove warnings lol. I'll use them for real later.
 		}
+			
 		/* 
 		 * Code for spawning explosions.
 		if (otherDestroyed && other.tag == "Enemy"){
@@ -48,18 +50,17 @@ public class Vida : MonoBehaviour {
 		Vida vida = obj.GetComponent<Vida>();
 		vida.curHP -= damage;
 		if (vida.curHP < 0)
-			vida.curHP = 0;
-		if (vida.curHP == 0){
-			GameObject objSpawn = obj.GetComponent<Vida>().spawned;
-			if (objSpawn != null){
-				GameObject spawn = Instantiate(objSpawn, vida.transform.position, Quaternion.identity) as GameObject;
-				WaypointMover spawnMover = spawn.GetComponent<WaypointMover>();
-				WaypointMover parentMover = obj.GetComponent<WaypointMover>();
-				spawnMover.waypoints = parentMover.waypoints;
-				spawnMover.destination = parentMover.destination;
-				spawnMover.hasDestination = parentMover.hasDestination;
-			}
+			//vida.curHP = 0;
+		if (vida.curHP <= 0){
 			Destroy (obj);
+			if (spawned == null)
+				return true;
+			GameObject spawn = Instantiate(spawned, vida.transform.position, Quaternion.identity) as GameObject;
+			WaypointMover spawnMover = spawn.GetComponent<WaypointMover>();
+			WaypointMover parentMover = vida.transform.gameObject.GetComponent<WaypointMover>();
+			spawnMover.waypoints = parentMover.waypoints;
+			spawnMover.destination = parentMover.destination;
+			spawnMover.hasDestination = parentMover.hasDestination;
 			return true;
 		}
 		return false;
