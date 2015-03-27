@@ -6,6 +6,7 @@ public class Vida : MonoBehaviour {
 	public int damage = 1;
 	public float speed;
 	public Owner owner;
+	public GameObject explosion;
 	public enum Owner{
 		FRIENDLY, ENEMY, NEUTRAL
 	}
@@ -25,6 +26,12 @@ public class Vida : MonoBehaviour {
 		bool thisDestroyed = DamageObject(curObj, otherVida.damage);
 		if (otherDestroyed && thisDestroyed){
 			// this is here to remove warnings lol. I'll use them for real later.
+		}
+		if (thisDestroyed){
+			Explode();
+		}
+		if (otherDestroyed){
+			otherVida.Explode();
 		}
 		/* 
 		 * Code for spawning explosions.
@@ -49,5 +56,13 @@ public class Vida : MonoBehaviour {
 			return true;
 		}
 		return false;
+	}
+
+	public void Explode(){
+		if (explosion != null){
+			print ("Exploding!");
+			GameObject ex = Instantiate(explosion, transform.position, Quaternion.identity) as GameObject;
+			Destroy (ex, 5);
+		}
 	}
 }

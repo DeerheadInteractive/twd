@@ -13,6 +13,7 @@ public class LevelLoader : MonoBehaviour {
 	public GameObject wallObj;
 	public GameObject groundObj;
 	public float groundHeight;
+	public GameObject[] monsters;
 
 	private const int _WALL = 1;
 
@@ -31,15 +32,18 @@ public class LevelLoader : MonoBehaviour {
 			using (reader)
 			{
 				tokenizer.ResetWithString(reader.ReadLine());
-				int width = int.Parse(tokenizer.nextToken());
-				int height = int.Parse(tokenizer.nextToken());
 
+				// Read dimensions of level
+				int width = tokenizer.nextInt();
+				int height = tokenizer.nextInt();
+
+				// Read level data (waypoints, walls, towers, maybe bridges?)
 				int min = 0;
 				int[,] grid = new int[width, height];
 				for (int x = 0; x < width; ++x){
 					tokenizer.ResetWithString(reader.ReadLine());
 					for (int y = 0; y < height; ++y){
-						grid[x, y] = int.Parse(tokenizer.nextToken());
+						grid[x, y] = tokenizer.nextInt();
 						if (grid[x, y] < min){
 							min = grid[x, y];
 						}
@@ -52,29 +56,63 @@ public class LevelLoader : MonoBehaviour {
 				GameObject floor = Instantiate(groundObj, new Vector3(width / 2, groundHeight, height / 2), Quaternion.identity) as GameObject;
 				floor.transform.localScale = new Vector3(width, 1, height);
 
-				Vector3[] vec3waypoints = new Vector3[-min];
+				Vector3[] waypoints = new Vector3[-min];
 
 				// Go through grid and create other GameObjects (like walls)
 				for (int x = 0; x < width; ++x){
 					for (int y = 0; y < height; ++y){
 						int val = grid[x, y];
 						if (val < 0){
-							vec3waypoints[-(val + 1)] = new Vector3(x, 0, y);
+							waypoints[-(val + 1)] = new Vector3(x, 0, y);
 						} else{
 							switch (val){
 							case _WALL:
-								GameObject wall = Instantiate(wallObj, new Vector3(x, 0, y), Quaternion.identity) as GameObject;
+								//GameObject wall = Instantiate(wallObj, new Vector3(x, 0, y), Quaternion.identity) as GameObject;
+								Instantiate(wallObj, new Vector3(x, 0, y), Quaternion.identity);
 								break;
 							}
 						}
 					}
 				}
 
-				// Create waypoints queue from array.
-				Queue waypoints = new Queue();
-				for (int i = 0; i < -min; ++i){
-					waypoints.Enqueue(vec3waypoints[i]);
+				// Read in wave data.
+				tokenizer.ResetWithString(reader.ReadLine());
+				Queue waveInfo = new Queue();
+
+				//TODO test this
+				do {
+					int m = tokenizer.ResetWithString(reader.ReadLine());
+					if (m == -1)
+						break;
+					Queue curWave = new Queue();
+					int n = tokenizer.nextInt();
+					int t = tokenizer.nextInt();
+					Vector3 entry = new Vector3(m, n, t);
+					curWave.Enqueue(entry);
+					do {
+						tokenizer.ResetWithString(reader.ReadLine());
+						m = tokenizer.nextInt();
+						if (m == -1)
+							break;
+						n = tokenizer.nextInt();
+						t = tokenizer.nextInt();
+						entry = new Vector3(m, n, t);
+						curWave.Enqueue(entry);
+					} while (true);
+					if (curWave.Count > 0)
+						waveInfo.Enqueue(curWave);
+				} while (true);
+
+				// Give relevant data to game controller.
+				GameObject obj = GameObject.FindGameObjectWithTag("GameController");
+				if (obj == null){
+					print ("No game controller found during level loading.");
+				} else{
+					GameController gc = obj.GetComponent<GameController>();
+					gc.waypoints = waypoints;
+					//gc.waveInfo = waveInfo;
 				}
+
 
 				reader.Close();
 				return true;
@@ -117,19 +155,30 @@ public class LevelLoader : MonoBehaviour {
 			curIndex = i; // Move curIndex to last searched char.
 			return str.Substring(first, (i - first));
 		}
+		public int nextInt(){
+			return int.Parse(nextToken());
+		}
 	}
 
 	/**
-	 * Level files should look like this:
-	 * n m		// Where n and m are integers, and (n, m) is the size of the level grid.
-	 * ... i ...
-	 * .
-	 * .
-	 * j		// The level grid, where each integer represents something (wall, path node, etc.)
-	 * .		// 0 = empty, 1 = wall, (we can distinguish 2 = wall that can be turned into tower?)
-	 * .		// Negative numbers will indicate path node order. (eg. monsters will start at -1
-	 * .		// and move to -2, -3, etc. wherever they are).
+	 * NO EMPTY LINES ALLOWED! It will break. Dashed lines (---) are not actually present
+	 * in the level file; they are just here for readability.
 	 * 
+	 * NO NON-NUMERIC SYMBOLS (except '-' and '.') ALLOWED! Those are characters, not faces.
+	 * 
+	 * Level files should look like this:
+	 * n m       // Where n and m are integers, and (n, m) is the size of the level grid.
+	 * ... i ...
+	 * .........
+	 * ......... // The level grid, where each integer represents something (wall, path node, etc.)
+	 * j.......j // 0 = empty, 1 = wall, (we can distinguish 2 = wall that can be turned into tower?)
+	 * ......... // Negative numbers will indicate path node order. (eg. monsters will start at -1
+	 * ......... // and move to -2, -3, etc. wherever they are).
+	 * ... i ...
+	 * ---------------------------------- // Wave descriptions:
+	 * m n t     // m = Monster index, n = how many of said monsters, t = time delay between monsters of this batch.
+	 * -1        // End wave
+	 * -1        // End wave description
 	 * 
 	 */
 }
