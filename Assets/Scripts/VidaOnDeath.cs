@@ -1,29 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Vida : MonoBehaviour {
+public class VidaOnDeath : MonoBehaviour {
 	public int curHP = 1, maxHP = 1;
 	public int damage = 1;
-	public int bounty = 5;
-	public int damageToPlayer = 1;
 	public float speed;
 	public Owner owner;
-	public GameObject explosion;
-	public int regenRate;
 	public GameObject spawned;
-	//public int bounty;
+	public int bounty;
 	public enum Owner{
 		FRIENDLY, ENEMY, NEUTRAL
 	}
 	void Start(){
-		//curHP = maxHP;//Can we remove this or add a tag so we can add wounded monsters?
+		curHP = maxHP;//Can we remove this or add a tag so we can add wounded monsters?
 	}
 	void OnTriggerEnter(Collider other){
 		if (other.tag == "Boundary" || other.tag == "Tower")
 			return;
 		GameObject curObj = GetComponent<Collider>().gameObject;
 		GameObject otherObj = other.gameObject;
-		Vida otherVida = otherObj.GetComponent<Vida>();
+		VidaOnDeath otherVida = otherObj.GetComponent<VidaOnDeath>();
 		if (otherVida == null || owner == otherVida.owner){
 			return;
 		}
@@ -31,12 +27,6 @@ public class Vida : MonoBehaviour {
 		bool thisDestroyed = DamageObject(curObj, otherVida.damage);
 		if (otherDestroyed && thisDestroyed){
 			// this is here to remove warnings lol. I'll use them for real later.
-		}
-		if (thisDestroyed){
-			Explode();
-		}
-		if (otherDestroyed){
-			otherVida.Explode();
 		}
 		/* 
 		 * Code for spawning explosions.
@@ -52,31 +42,18 @@ public class Vida : MonoBehaviour {
 	}
 
 	bool DamageObject(GameObject obj, int damage){
-		Vida vida = obj.GetComponent<Vida>();
-		vida.curHP -= damage;
-		if (vida.curHP < 0)
-			vida.curHP = 0;
-		if (vida.curHP == 0){
-			GameObject objSpawn = obj.GetComponent<Vida>().spawned;
-			if (objSpawn != null){
-				GameObject spawn = Instantiate(objSpawn, vida.transform.position, Quaternion.identity) as GameObject;
-				WaypointMover spawnMover = spawn.GetComponent<WaypointMover>();
-				WaypointMover parentMover = obj.GetComponent<WaypointMover>();
-				spawnMover.waypoints = parentMover.waypoints;
-				spawnMover.destination = parentMover.destination;
-				spawnMover.hasDestination = parentMover.hasDestination;
-			}
+		VidaOnDeath vidaOD = obj.GetComponent<VidaOnDeath>();
+		vidaOD.curHP -= damage;
+		if (vidaOD.curHP < 0)
+			vidaOD.curHP = 0;
+		if (vidaOD.curHP == 0){
 			Destroy (obj);
+			if (spawned == null)
+				return true;
+			GameObject spawn = Instantiate(spawned, vidaOD.transform.position, Quaternion.identity) as GameObject;
+			spawn.GetComponent<WaypointMover>().waypoints = vidaOD.transform.gameObject.GetComponent<WaypointMover>().waypoints;
 			return true;
 		}
 		return false;
-	}
-
-	public void Explode(){
-		if (explosion != null){
-			print ("Exploding!");
-			GameObject ex = Instantiate(explosion, transform.position, Quaternion.identity) as GameObject;
-			Destroy (ex, 5);
-		}
 	}
 }

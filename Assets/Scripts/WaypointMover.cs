@@ -8,7 +8,8 @@ public class WaypointMover : MonoBehaviour {
 	public float rotationSpeed;
 	public Queue waypoints;
 
-	private Vector3 destination;
+	public Vector3 destination;
+	public bool hasDestination = false;
 	private float epsilon = 0.3f;
 
 	void Start () {
@@ -18,10 +19,12 @@ public class WaypointMover : MonoBehaviour {
 		//rigidbody.angularVelocity = new Vector3(0, rotationSpeed, 0);
 		//print(rigidbody.angularVelocity);
 
-		if (waypoints == null || waypoints.Count < 1){
+		if ((waypoints == null || waypoints.Count < 1)&&!hasDestination){
 			print ("Error: Too few waypoints on start. (WaypointMover");
 		} else{
-			destination = (Vector3)(waypoints.Dequeue());
+			if (!hasDestination)
+				destination = (Vector3)(waypoints.Dequeue());
+			hasDestination = true;
 		}
 	}
 	
