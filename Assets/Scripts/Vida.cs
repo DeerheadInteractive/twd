@@ -65,11 +65,21 @@ public class Vida : MonoBehaviour {
 				spawnMover.waypoints = parentMover.waypoints;
 				spawnMover.destination = parentMover.destination;
 				spawnMover.hasDestination = parentMover.hasDestination;
-			}
+			} /*else if (obj.tag == "Enemy"){
+				GameController gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+				gc.updateMonsterCount(-1);
+			}*/
 			Destroy (obj);
 			return true;
 		}
 		return false;
+	}
+
+	void OnDestroy(){
+		if (tag == "Enemy"){
+			GameController gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+			gc.updateMonsterCount(-1);
+		}
 	}
 
 	public void Explode(){

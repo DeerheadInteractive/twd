@@ -10,7 +10,7 @@ public class WaypointMover : MonoBehaviour {
 
 	public Vector3 destination;
 	public bool hasDestination = false;
-	private float epsilon = 0.3f;
+	private float epsilon = 0.1f;
 
 	void Start () {
 		// Rotation code

@@ -13,15 +13,20 @@ public class LevelLoader : MonoBehaviour {
 	public GameObject wallObj;
 	public GameObject groundObj;
 	public float groundHeight;
-	public GameObject[] monsters;
+
+	public GameObject portalStart;
+	public GameObject portalEnd;
 
 	private const int _WALL = 1;
 
 	void Start () {
-		if (Load(levelPrefix + levelName + levelSuffix))
+		if (Load(levelPrefix + levelName + levelSuffix)){
 			print ("Loaded " + levelName + " successfully.");
-		else
+			GameController gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+			gc.updateMonsterCount(0);
+		} else{
 			print ("Error loading level " + levelName + ".");
+		}
 	}
 
 	private bool Load(string fileName){
@@ -50,14 +55,41 @@ public class LevelLoader : MonoBehaviour {
 					}
 				}
 
+				// Read in wave data.
+				tokenizer.ResetWithString(reader.ReadLine());
+				Queue waveInfo = new Queue();
+				do {
+					tokenizer.ResetWithString(reader.ReadLine());
+					int m = tokenizer.nextInt();
+					if (m == -1)
+						break;
+					Queue curWave = new Queue();
+					int n = tokenizer.nextInt();
+					float t = tokenizer.nextFloat();
+					Vector3 entry = new Vector3(m, n, t);
+					curWave.Enqueue(entry);
+					do {
+						tokenizer.ResetWithString(reader.ReadLine());
+						m = tokenizer.nextInt();
+						if (m == -1)
+							break;
+						n = tokenizer.nextInt();
+						t = tokenizer.nextFloat();
+						entry = new Vector3(m, n, t);
+						curWave.Enqueue(entry);
+					} while (true);
+					waveInfo.Enqueue(curWave);
+				} while (true);
+
+
 				// ------ Creating objects -------------------------
-
+				
 				// Create floor
-				GameObject floor = Instantiate(groundObj, new Vector3(width / 2, groundHeight, height / 2), Quaternion.identity) as GameObject;
+				GameObject floor = Instantiate(groundObj, new Vector3(width / 2 - 0.5f, groundHeight, height / 2 - 0.5f), Quaternion.identity) as GameObject;
 				floor.transform.localScale = new Vector3(width, 1, height);
-
+				
 				Vector3[] waypoints = new Vector3[-min];
-
+				
 				// Go through grid and create other GameObjects (like walls)
 				for (int x = 0; x < width; ++x){
 					for (int y = 0; y < height; ++y){
@@ -74,45 +106,22 @@ public class LevelLoader : MonoBehaviour {
 						}
 					}
 				}
-
-				// Read in wave data.
-				tokenizer.ResetWithString(reader.ReadLine());
-				Queue waveInfo = new Queue();
-
-				//TODO test this
-				do {
-					int m = tokenizer.ResetWithString(reader.ReadLine());
-					if (m == -1)
-						break;
-					Queue curWave = new Queue();
-					int n = tokenizer.nextInt();
-					int t = tokenizer.nextInt();
-					Vector3 entry = new Vector3(m, n, t);
-					curWave.Enqueue(entry);
-					do {
-						tokenizer.ResetWithString(reader.ReadLine());
-						m = tokenizer.nextInt();
-						if (m == -1)
-							break;
-						n = tokenizer.nextInt();
-						t = tokenizer.nextInt();
-						entry = new Vector3(m, n, t);
-						curWave.Enqueue(entry);
-					} while (true);
-					if (curWave.Count > 0)
-						waveInfo.Enqueue(curWave);
-				} while (true);
-
-				// Give relevant data to game controller.
+				
+				// Create portals
+				Instantiate(portalStart, waypoints[0], Quaternion.identity);
+				Instantiate(portalEnd, waypoints[-(min + 1)], Quaternion.identity);
+				
+				// Give waypoint and waveinfo data to game controller.
 				GameObject obj = GameObject.FindGameObjectWithTag("GameController");
 				if (obj == null){
 					print ("No game controller found during level loading.");
 				} else{
 					GameController gc = obj.GetComponent<GameController>();
 					gc.waypoints = waypoints;
-					//gc.waveInfo = waveInfo;
+					gc.waveInfo = waveInfo;
+					Camera cam = Camera.main;
+					cam.transform.position = new Vector3(width / 2, GameController.CAMERA_HEIGHT, height / 2);
 				}
-
 
 				reader.Close();
 				return true;
@@ -158,13 +167,24 @@ public class LevelLoader : MonoBehaviour {
 		public int nextInt(){
 			return int.Parse(nextToken());
 		}
+		public float nextFloat(){
+			return float.Parse(nextToken());
+		}
 	}
 
 	/**
-	 * NO EMPTY LINES ALLOWED! It will break. Dashed lines (---) are not actually present
-	 * in the level file; they are just here for readability.
+	 * Apparently you may place empty lines wherever you want.
+	 * Dashed lines (---) are not actually present in the level file; they
+	 * are just here for readability. Don't put those in, because that WILL break the level loader.
 	 * 
 	 * NO NON-NUMERIC SYMBOLS (except '-' and '.') ALLOWED! Those are characters, not faces.
+	 * You may write things after each line's expected input, however.
+	 * Eg.
+	 * 3 3
+	 * 0 0 0  Comments here
+	 * 0 0 0  are perfectly
+	 * 0 0 0  okay. But don't get carried away!
+	 * (etc.)
 	 * 
 	 * Level files should look like this:
 	 * n m       // Where n and m are integers, and (n, m) is the size of the level grid.
@@ -180,5 +200,7 @@ public class LevelLoader : MonoBehaviour {
 	 * -1        // End wave
 	 * -1        // End wave description
 	 * 
+	 * Choose your monster indices based on where the monster appears in the GameController's list of monsters.
+	 * Please avoid rearranging monsters in said list, because all levels depend on the same ordering of monsters.
 	 */
 }
