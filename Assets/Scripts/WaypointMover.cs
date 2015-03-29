@@ -40,6 +40,8 @@ public class WaypointMover : MonoBehaviour {
 				if (vida != null){
 					vida.Explode();
 				}
+				GameController gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+				gc.updateHealth(-vida.damageToPlayer);
 				Destroy(transform.gameObject);
 				return;
 			} else{

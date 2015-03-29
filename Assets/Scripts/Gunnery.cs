@@ -8,10 +8,10 @@ public class Gunnery : MonoBehaviour {
 	public GameObject shot;
 	public float shotSpeed;
 
-	private GameObject closestObj;
-	private float closestDistance;
+	protected GameObject closestObj;
+	protected float closestDistance;
 
-	private float lastFire;
+	protected float lastFire;
 
 	void Start () {
 		GetComponent<SphereCollider>().radius = range;

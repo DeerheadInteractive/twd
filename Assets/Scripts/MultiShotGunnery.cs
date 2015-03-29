@@ -1,19 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MultiShotGunnery : MonoBehaviour {
-	public float range;
-	public float fireRate;
-	public int damage;
-	public GameObject shot;
-	public float shotSpeed;
+public class MultiShotGunnery : Gunnery {
 	public int targets;
 
 	private ArrayList inRange;  
 	//private GameObject closestObj;
-	private float closestDistance;
+	//private float closestDistance;
 
-	private float lastFire;
+	//private float lastFire;
 
 	void Start () {
 		GetComponent<SphereCollider>().radius = range;
