@@ -15,7 +15,7 @@ public class AOEMover : MonoBehaviour {
 	void Start(){
 		spawnTime = Time.time;
 	}
-
+	/*
 	void Update () {
 		// Despawn if lifetime expires.
 		if (Time.time > (spawnTime + lifeTime)){
@@ -29,7 +29,6 @@ public class AOEMover : MonoBehaviour {
 		transform.rotation = Quaternion.LookRotation(targetDirection);
 		rigidbody.velocity = transform.forward * speed;
 	}
-
 	void Explode(Vector3 center, float aoeRadius) {
 			var hitColliders = Physics.OverlapSphere(center, radius);
 			for (var i = 0; i < hitColliders.Length; i++) {
@@ -38,4 +37,6 @@ public class AOEMover : MonoBehaviour {
 				//call damageObject here?
 			}
 		}
+	}
+	*/
 }
