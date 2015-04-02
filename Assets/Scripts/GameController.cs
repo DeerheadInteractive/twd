@@ -53,11 +53,16 @@ public class GameController : MonoBehaviour {
 		txt.text = "Money: " + money;
 	}
 
+	public bool canAfford(int val){
+		return (money - val) >= 0;
+	}
+
 	public void updateWave(){
 		wavenum++;
 		Text txt = waveText.GetComponent<Text>();
 		txt.text = "Wave: " + wavenum;
 	}
+
 
 	IEnumerator NextWave(){
 		if (waveInfo.Count > 0){
