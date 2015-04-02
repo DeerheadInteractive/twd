@@ -8,6 +8,7 @@ public class Vida : MonoBehaviour {
 	public int damageToPlayer = 1;
 	public float speed;
 	public Owner owner;
+	public GameObject explosion;
 	public int regenRate;
 	public GameObject spawned;
 	//public int bounty;
@@ -30,6 +31,12 @@ public class Vida : MonoBehaviour {
 		bool thisDestroyed = DamageObject(curObj, otherVida.damage);
 		if (otherDestroyed && thisDestroyed){
 			// this is here to remove warnings lol. I'll use them for real later.
+		}
+		if (thisDestroyed){
+			Explode();
+		}
+		if (otherDestroyed){
+			otherVida.Explode();
 		}
 		/* 
 		 * Code for spawning explosions.
@@ -58,10 +65,32 @@ public class Vida : MonoBehaviour {
 				spawnMover.waypoints = parentMover.waypoints;
 				spawnMover.destination = parentMover.destination;
 				spawnMover.hasDestination = parentMover.hasDestination;
+			} /*else if (obj.tag == "Enemy"){
+				GameController gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+				gc.updateMonsterCount(-1);
+			}*/
+			if (obj.tag == "Enemy"){
+				GameController blah = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+
 			}
 			Destroy (obj);
 			return true;
 		}
 		return false;
+	}
+
+	void OnDestroy(){
+		if (tag == "Enemy"){
+			GameController gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+			gc.updateMonsterCount(-1);
+		}
+	}
+
+	public void Explode(){
+		if (explosion != null){
+			print ("Exploding!");
+			GameObject ex = Instantiate(explosion, transform.position, Quaternion.identity) as GameObject;
+			Destroy (ex, 5);
+		}
 	}
 }

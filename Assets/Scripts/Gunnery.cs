@@ -8,10 +8,10 @@ public class Gunnery : MonoBehaviour {
 	public GameObject shot;
 	public float shotSpeed;
 
-	private GameObject closestObj;
-	private float closestDistance;
+	protected GameObject closestObj;
+	protected float closestDistance;
 
-	private float lastFire;
+	protected float lastFire;
 
 	void Start () {
 		GetComponent<SphereCollider>().radius = range;
@@ -37,8 +37,13 @@ public class Gunnery : MonoBehaviour {
 		// If we don't have any objects in range, don't shoot.
 		if (closestObj == null)
 			return;
-
+		
 		Vector3 direction = Vector3.Normalize(transform.position - closestObj.transform.position);
+
+		// Turn turret to face target
+		transform.forward = -direction;
+
+		// Create shot
 		GameObject myShot = Instantiate(shot, transform.position, Quaternion.LookRotation(direction)) as GameObject;
 		TargetedMover mover = myShot.GetComponent<TargetedMover>();
 		mover.speed = shotSpeed;
