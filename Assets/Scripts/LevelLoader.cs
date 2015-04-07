@@ -11,13 +11,18 @@ public class LevelLoader : MonoBehaviour {
 	private static string levelSuffix = ".txt";
 	public string levelName;
 	public GameObject wallObj;
+	public GameObject invisWallObj;
+	public GameObject bridgeObj;
 	public GameObject groundObj;
 	public float groundHeight;
+	public float bridgeHeight;
+	public float playerHeight;
 
 	public GameObject portalStart;
 	public GameObject portalEnd;
 
 	private const int _WALL = 1;
+	private const int _BRIDGE = 2;
 
 	void Start () {
 		if (Load(levelPrefix + levelName + levelSuffix)){
@@ -96,15 +101,29 @@ public class LevelLoader : MonoBehaviour {
 						int val = grid[x, y];
 						if (val < 0){
 							waypoints[-(val + 1)] = new Vector3(x, 0, y);
-						} else{
-							switch (val){
-							case _WALL:
-								//GameObject wall = Instantiate(wallObj, new Vector3(x, 0, y), Quaternion.identity) as GameObject;
-								Instantiate(wallObj, new Vector3(x, 0, y), Quaternion.identity);
-								break;
-							}
+						}
+						switch (val){
+						case _WALL:
+							Instantiate(wallObj, new Vector3(x, 0, y), Quaternion.identity);
+							break;
+						case _BRIDGE:
+							GameObject bridgeInstance = Instantiate(bridgeObj, new Vector3(x, bridgeHeight, y), new Quaternion(0,0,0,0)) as GameObject;
+							bridgeInstance.transform.Rotate(90, 0, 0);
+							break;
+						default:
+							Instantiate(invisWallObj, new Vector3(x, playerHeight, y), Quaternion.identity);
+							break;
 						}
 					}
+				}
+				// Create invisible wall border
+				for (int x = -1; x < width + 1; ++x){
+					Instantiate(invisWallObj, new Vector3(x, playerHeight, -1), Quaternion.identity);
+					Instantiate(invisWallObj, new Vector3(x, playerHeight, height), Quaternion.identity);
+				}
+				for (int y = 0; y < height; ++y){
+					Instantiate(invisWallObj, new Vector3(-1, playerHeight, y), Quaternion.identity);
+					Instantiate(invisWallObj, new Vector3(width, playerHeight, y), Quaternion.identity);
 				}
 				
 				// Create portals
