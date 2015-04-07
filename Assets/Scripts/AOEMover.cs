@@ -31,11 +31,12 @@ public class AOEMover : MonoBehaviour {
 	}
 
 	void Explode(Vector3 center, float aoeRadius) {
-			var hitColliders = Physics.OverlapSphere(center, radius);
+			var hitColliders = Physics.OverlapSphere(center, aoeRadius);
 			for (var i = 0; i < hitColliders.Length; i++) {
 			if(hitColliders[i].tag == "ENEMY");
 			{
 				//call damageObject here?
 			}
 		}
+	}
 }

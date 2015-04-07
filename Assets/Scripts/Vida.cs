@@ -11,6 +11,7 @@ public class Vida : MonoBehaviour {
 	public GameObject explosion;
 	public int regenRate;
 	public GameObject spawned;
+	public float deathTimer;
 	//public int bounty;
 	public enum Owner{
 		FRIENDLY, ENEMY, NEUTRAL
@@ -90,7 +91,7 @@ public class Vida : MonoBehaviour {
 		if (explosion != null){
 			print ("Exploding!");
 			GameObject ex = Instantiate(explosion, transform.position, Quaternion.identity) as GameObject;
-			Destroy (ex, 5);
+			Destroy (ex, deathTimer);
 		}
 	}
 }
