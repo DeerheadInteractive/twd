@@ -14,6 +14,7 @@ public class LevelLoader : MonoBehaviour {
 	public GameObject invisWallObj;
 	public GameObject bridgeObj;
 	public GameObject groundObj;
+	public GameObject playerObj;
 	public float groundHeight;
 	public float bridgeHeight;
 	public float playerHeight;
@@ -23,6 +24,7 @@ public class LevelLoader : MonoBehaviour {
 
 	private const int _WALL = 1;
 	private const int _BRIDGE = 2;
+	private const int _PLAYER = 3;
 
 	void Start () {
 		if (Load(levelPrefix + levelName + levelSuffix)){
@@ -104,6 +106,7 @@ public class LevelLoader : MonoBehaviour {
 						}
 						switch (val){
 						case _WALL:
+						case _PLAYER:
 							Instantiate(wallObj, new Vector3(x, 0, y), Quaternion.identity);
 							break;
 						case _BRIDGE:
@@ -113,6 +116,9 @@ public class LevelLoader : MonoBehaviour {
 						default:
 							Instantiate(invisWallObj, new Vector3(x, playerHeight, y), Quaternion.identity);
 							break;
+						}
+						if (val == _PLAYER){
+							Instantiate(playerObj, new Vector3(x, playerHeight, y), Quaternion.identity);
 						}
 					}
 				}
