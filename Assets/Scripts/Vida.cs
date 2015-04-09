@@ -71,8 +71,8 @@ public class Vida : MonoBehaviour {
 				gc.updateMonsterCount(-1);
 			}*/
 			if (obj.tag == "Enemy"){
-				GameController blah = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
-
+				GameController gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+				gc.updateMoney(bounty);
 			}
 			Destroy (obj);
 			return true;
@@ -82,8 +82,13 @@ public class Vida : MonoBehaviour {
 
 	void OnDestroy(){
 		if (tag == "Enemy"){
-			GameController gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
-			gc.updateMonsterCount(-1);
+			GameObject obj = GameObject.FindGameObjectWithTag("GameController");
+			if (obj != null){
+				GameController gc = obj.GetComponent<GameController>();
+				if (gc != null){
+					gc.updateMonsterCount(-1);
+				}
+			}
 		}
 	}
 
