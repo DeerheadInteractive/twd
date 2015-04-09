@@ -52,45 +52,33 @@ public class BuildMenu : MonoBehaviour {
 		}
 		// Select a tower or enemy
 		else if(Input.GetMouseButtonDown(0) && !waitForInput) {
-			if(towerClicked()) {
-				selectedObject = getSelectedObject();
+			if(setTower()) {
+				//selectedObject = getSelectedObject();
 				towerInfoPanel.SetActive(true);
-				towerInfoPanel.GetComponent<TowerInfo>().setSelectedTower(selectedObject);
+				//towerInfoPanel.GetComponent<TowerInfo>().setSelectedTower(selectedObject);
 				buildMenuPanel.SetActive(false);
 			}
 		}
 	}
 
-	bool towerClicked() {
-		Debug.Log ("entered towerClicked()");
+	bool setTower() {
 		RaycastHit hit = new RaycastHit ();
 		Vector3 mousePos = Input.mousePosition;
 
+		GameObject rayObj, tower;
+
+		// Did the raycast hit an object?
 		if(Physics.Raycast (Camera.main.ScreenPointToRay(mousePos), out hit)) {
-			Debug.Log("raycast hit something");
-			// TODO: This if statement is true for any prefab I think. It needs to work only on towers
-			if(hit.collider.gameObject.tag.Equals("Tower")) {
-			//if(hit.transform.gameObject.GetType() == Resources.Load("Tower").GetType()) {
-				Debug.Log ("raycast hit tower");
+			rayObj = hit.collider.gameObject;
+			// Was the object clicked a tower?
+			if(rayObj.transform.parent.tag == "Tower") {
+				tower = rayObj.transform.parent.gameObject;
+				towerInfoPanel.GetComponent<TowerInfo>().setSelectedTower(tower);
 				return true;
 			}
 		}
 
 		return false;
-	}
-
-	GameObject getSelectedObject() {
-		RaycastHit hit = new RaycastHit ();
-		Vector3 mousePos = Input.mousePosition;
-
-		if (Physics.Raycast (Camera.main.ScreenPointToRay (mousePos), out hit)) {
-			if(hit.transform.gameObject.GetType() == Resources.Load("Tower").GetType()) {
-				return hit.collider.gameObject;
-			}
-		}
-
-		Debug.Log ("No object hit");
-		return null;
 	}
 
 	private void BuildSingleTarget() {

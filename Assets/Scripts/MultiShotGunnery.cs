@@ -52,14 +52,16 @@ public class MultiShotGunnery : Gunnery {
 	/// <param name="obj">An object within firing range</param>
 	/// 
 	public void RadiusDetected(GameObject obj){
-		inRange.Add (obj);
+		if (obj != null)
+			inRange.Add (obj);
 	}
 
 	void OnTriggerStay(Collider other){
 		GameObject obj = other.transform.gameObject;
 		if (other.tag == "Enemy"){
-			GameObject self = GetComponent<Collider>().gameObject;
-			self.GetComponent<MultiShotGunnery>().RadiusDetected(obj);
+			//GameObject self = GetComponent<Collider>().gameObject;
+			//self.GetComponent<MultiShotGunnery>().RadiusDetected(obj);
+			RadiusDetected(obj);
 		}
 	}
 }

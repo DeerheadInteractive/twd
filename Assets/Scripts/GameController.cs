@@ -4,6 +4,7 @@ using System.Collections;
 
 public class GameController : MonoBehaviour {
 	public static float CAMERA_HEIGHT = 10;
+	public Animator animator;
 	public GameObject[] enemies;
 	public Vector3[] waypoints;
 	public Queue waveInfo;
@@ -19,6 +20,8 @@ public class GameController : MonoBehaviour {
 	public int health;
 	public int money;
 	public int wavenum;
+
+	private bool gameOver = false;
 
 
 	private bool isFirstWave = true;
@@ -43,8 +46,14 @@ public class GameController : MonoBehaviour {
 
 	public void updateHealth(int val){
 		health += val;
+		if (health < 0)
+			health = 0;
+
 		Text txt = healthText.GetComponent<Text>();
 		txt.text = "Health: " + health;
+
+		if (health == 0)
+			GameOver(false);
 	}
 
 	public void updateMoney(int val){
@@ -65,6 +74,8 @@ public class GameController : MonoBehaviour {
 
 
 	IEnumerator NextWave(){
+		if (gameOver)
+			yield break;
 		if (waveInfo.Count > 0){
 			updateWave();
 			if (!isFirstWave){
@@ -94,6 +105,7 @@ public class GameController : MonoBehaviour {
 		if (win){
 			print ("End of level.");
 		} else{
+			animator.SetTrigger("GameOver");
 			print ("You lost? Pfft.");
 		}
 	}

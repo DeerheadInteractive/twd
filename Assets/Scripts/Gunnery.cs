@@ -74,4 +74,9 @@ public class Gunnery : MonoBehaviour {
 			self.GetComponent<Gunnery>().RadiusDetected(obj);
 		}
 	}
+
+	public void updateDamage(int update) {
+		damage = damage + update;
+		Debug.Log ("Damage (Gunnery): " + damage);
+	}
 }
