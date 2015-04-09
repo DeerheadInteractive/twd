@@ -18,13 +18,18 @@ public class DebuffGunnery : Gunnery {
 
 	void Update () {
 		// Fire a shot if we can.
-		if (Time.time > lastFire + fireRate){
+		/*if (Time.time > lastFire + fireRate){
 			lastFire = Time.time;
 			Shoot();
-		}
+		}*/
 
 		// Clear closest distance and object.
 		inRange = new ArrayList();
+		/*foreach (Vida target in inRange) {
+						print ("slowing update");
+						target.speed -= slowMove;
+				}*/
+
 	}
 
 	/// <summary>
@@ -35,7 +40,7 @@ public class DebuffGunnery : Gunnery {
 		if (inRange.Count == 0)
 			return;
 
-		foreach(GameObject target in inRange) {
+		/*foreach(GameObject target in inRange) {
 			Vector3 direction = Vector3.Normalize(transform.position - target.transform.position);
 			GameObject myShot = Instantiate(shot, transform.position, Quaternion.LookRotation(direction)) as GameObject;
 			TargetedMover mover = myShot.GetComponent<TargetedMover>();
@@ -47,9 +52,13 @@ public class DebuffGunnery : Gunnery {
 			if (target.tag == "ENEMY")
 			{
 				Vida enemy = GameObject.getComponent<Vida>();
-				enemy.speed -= slowMove;
+				enemy.speed = enemy.baseSpeed - slowMove;
 			}
-		}
+		}*/
+		/*foreach (Vida target in inRange) {
+			print("slowing shot");
+				target.speed = target.baseSpeed - slowMove;
+		}*/
 	}
 
 	/// <summary>
@@ -66,6 +75,8 @@ public class DebuffGunnery : Gunnery {
 		if (other.tag == "Enemy"){
 			GameObject self = GetComponent<Collider>().gameObject;
 			self.GetComponent<DebuffGunnery>().RadiusDetected(obj);
+			print("slowing onstay");
+			other.GetComponent<Vida>().speed = other.GetComponent<Vida>().baseSpeed - slowMove;
 		}
 	}
 }
