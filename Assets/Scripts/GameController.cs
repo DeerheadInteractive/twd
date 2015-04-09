@@ -79,9 +79,7 @@ public class GameController : MonoBehaviour {
 		if (waveInfo.Count > 0){
 			updateWave();
 			if (!isFirstWave){
-				print ("yielding");
 				yield return new WaitForSeconds(waveDelay);
-				print ("Yielded");
 			} else{
 				isFirstWave = false;
 			}

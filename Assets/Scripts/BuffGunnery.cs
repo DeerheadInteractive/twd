@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class DebuffGunnery : Gunnery {
+public class BuffGunnery : Gunnery {
 	public int targets;
-	public int slowMove;
+	public float dmgUp = 1.2f;
 
 	private ArrayList inRange;  
 	//private GameObject closestObj;
@@ -67,15 +67,28 @@ public class DebuffGunnery : Gunnery {
 	/// <param name="obj">An object within firing range</param>
 	/// 
 	public void RadiusDetected(GameObject obj){
-		inRange.Add (obj);
+		//inRange.Add (obj);
 	}
 
 	void OnTriggerStay(Collider other){
+		//if (other.tag != "Untagged" && other.tag != "Enemy")
+		//	print (other.tag);
 		GameObject obj = other.transform.gameObject;
-		if (other.tag == "Enemy"){
-			RadiusDetected(obj);
-			print("slowing onstay");
-			other.GetComponent<Vida>().speed = other.GetComponent<Vida>().baseSpeed - slowMove;
+		if (obj.transform.parent == null)
+						return;
+		if (obj.transform.parent.gameObject != null){
+			//print ("something has a parent.");
+			GameObject parent = obj.transform.parent.gameObject;
+			Gunnery g = parent.GetComponent<Gunnery>();
+			if (g != null){
+				//print ("increasing damageMod");	
+				g.increaseDamageMod(dmgUp);
+			}
+		}
+
+		if (other.tag == "Tower"){
+			//print("buffing onstay");
+			//other.GetComponent<Gunnery>().increaseDamageMod(dmgUp);
 		}
 	}
 }

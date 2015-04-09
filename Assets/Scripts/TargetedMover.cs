@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class TargetedMover : MonoBehaviour {
@@ -24,7 +24,8 @@ public class TargetedMover : MonoBehaviour {
 		if (target != null){
 			targetDirection = target.transform.position - transform.position;
 		}
-		transform.rotation = Quaternion.LookRotation(targetDirection);
+		transform.forward = targetDirection;
+		//transform.rotation = Quaternion.LookRotation(targetDirection);
 		rigidbody.velocity = transform.forward * speed;
 	}
 }

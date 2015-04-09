@@ -8,6 +8,8 @@ public class Gunnery : MonoBehaviour {
 	public GameObject shot;
 	public float shotSpeed;
 
+	public float damageMod;
+
 	protected GameObject closestObj;
 	protected float closestDistance;
 
@@ -28,6 +30,7 @@ public class Gunnery : MonoBehaviour {
 		// Clear closest distance and object.
 		closestDistance = -1;
 		closestObj = null;
+		damageMod = 1;
 	}
 
 	/// <summary>
@@ -49,8 +52,12 @@ public class Gunnery : MonoBehaviour {
 		mover.speed = shotSpeed;
 		mover.target = closestObj;
 		Vida shotVida = myShot.GetComponent<Vida>();
-		shotVida.damage = damage;
+		shotVida.damage = (int)((float)damage * damageMod);
 		shotVida.owner = Vida.Owner.FRIENDLY;
+	}
+
+	public void increaseDamageMod(float val){
+		damageMod *= val;
 	}
 
 	/// <summary>
