@@ -6,7 +6,7 @@ public class Vida : MonoBehaviour {
 	public int damage = 1;
 	public int bounty = 5;
 	public int damageToPlayer = 1;
-
+	public float baseSpeed;
 	public float speed;
 	public Owner owner;
 	public GameObject explosion;
