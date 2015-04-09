@@ -45,6 +45,8 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void updateHealth(int val){
+		if (gameOver)
+			return;
 		health += val;
 		if (health < 0)
 			health = 0;
@@ -52,8 +54,9 @@ public class GameController : MonoBehaviour {
 		Text txt = healthText.GetComponent<Text>();
 		txt.text = "Health: " + health;
 
-		if (health == 0)
+		if (health == 0){
 			GameOver(false);
+		}
 	}
 
 	public void updateMoney(int val){
@@ -79,6 +82,8 @@ public class GameController : MonoBehaviour {
 		if (waveInfo.Count > 0){
 			updateWave();
 			if (!isFirstWave){
+				if (gameOver)
+					yield break;
 				yield return new WaitForSeconds(waveDelay);
 			} else{
 				isFirstWave = false;
@@ -86,6 +91,8 @@ public class GameController : MonoBehaviour {
 			Queue wave = (Queue)(waveInfo.Dequeue());
 			foreach (Vector3 batchInfo in wave){
 				for (int i = 0; i < batchInfo.y; ++i){
+					if (gameOver)
+						yield break;
 					GameObject enemy = Instantiate(enemies[(int)batchInfo.x], waypoints[0], Quaternion.identity) as GameObject;
 					enemy.GetComponent<WaypointMover>().InitializeWaypoints(waypoints);
 					updateMonsterCount(1);
@@ -100,8 +107,10 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void GameOver(bool win){
+		gameOver = true;
 		if (win){
 			print ("End of level.");
+			animator.SetTrigger("GameOver");
 		} else{
 			animator.SetTrigger("GameOver");
 			print ("You lost? Pfft.");

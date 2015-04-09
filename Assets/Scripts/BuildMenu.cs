@@ -5,10 +5,12 @@ using System.Collections;
 public class BuildMenu : MonoBehaviour {
 
 	public bool singleTarget_isClicked, multiTarget_isClicked, waitForInput;
+	private string selectedTag;
 
 	// Menus
 	GameObject buildMenuPanel;
 	public GameObject towerInfoPanel;
+	public GameObject playerInfoPanel;
 
 	// Tower Prefabs
 	GameObject singleTargetTower;
@@ -20,8 +22,8 @@ public class BuildMenu : MonoBehaviour {
 	void Start () {
 		// Initialize menu panels
 		buildMenuPanel = this.gameObject;
-		//towerInfoPanel.GetComponent<TowerInfo>().setBuildMenu (buildMenuPanel);
 		towerInfoPanel.SetActive (false);
+		playerInfoPanel.SetActive (false);
 
 		// Initialize tower prefabs
 		singleTargetTower = (GameObject)Resources.Load ("Tower");
@@ -36,7 +38,7 @@ public class BuildMenu : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		// Check for left click then build single target tower
-		if (Input.GetMouseButtonDown (0) && singleTarget_isClicked && waitForInput) {
+		/*if (Input.GetMouseButtonDown (0) && singleTarget_isClicked && waitForInput) {
 			Debug.Log ("Entering BuildSingleTarget()");
 			BuildSingleTarget ();
 			singleTarget_isClicked = false;
@@ -58,10 +60,48 @@ public class BuildMenu : MonoBehaviour {
 				//towerInfoPanel.GetComponent<TowerInfo>().setSelectedTower(selectedObject);
 				buildMenuPanel.SetActive(false);
 			}
+			setSelectedObjectTag();
+		}*/
+		if (Input.GetMouseButtonDown (0)) {
+			setSelectedObject();
+
+			switch (waitForInput) {
+			case true:
+				if (singleTarget_isClicked) {
+					BuildSingleTarget();
+					singleTarget_isClicked = false;
+					waitForInput = false;
+				} else if (multiTarget_isClicked) {
+					BuildMultiTarget();
+					multiTarget_isClicked = false;
+					waitForInput = false;
+				}
+				return;
+				break;
+			case false:
+				if(getSelectedObjectTag() == "Tower") {
+					towerInfoPanel.GetComponent<TowerInfo>().setSelectedTower(getSelectedObject ());
+					towerInfoPanel.SetActive(true);
+					buildMenuPanel.SetActive(false);
+					selectedTag = null;
+					selectedObject = null;
+				}
+				else if(getSelectedObjectTag() == "Player") {
+					playerInfoPanel.SetActive(true);
+					buildMenuPanel.SetActive(false);
+					selectedTag = null;
+					selectedObject = null;
+				}
+				return;
+				break;
+			default:
+				Debug.Log ("this is bad");
+				break;
+			}
 		}
 	}
 
-	bool setTower() {
+	/*bool setTower() {
 		RaycastHit hit = new RaycastHit ();
 		Vector3 mousePos = Input.mousePosition;
 
@@ -79,6 +119,36 @@ public class BuildMenu : MonoBehaviour {
 		}
 
 		return false;
+	}*/
+
+	// Getter and Setter for selected object tag
+	void setSelectedObject() {
+		RaycastHit hit = new RaycastHit ();
+		Vector3 mousePos = Input.mousePosition;
+
+		if (Physics.Raycast (Camera.main.ScreenPointToRay (mousePos), out hit)) {
+			selectedTag = hit.collider.gameObject.tag;
+			if(hit.collider.gameObject.transform.parent == null) {
+				Debug.Log("no parent");
+				selectedObject = hit.collider.gameObject;
+			}
+			else {
+				selectedObject = hit.collider.gameObject.transform.parent.gameObject;
+			}
+
+			Debug.Log ("Selected Object Tag: " + selectedTag);
+
+		}
+
+		return;
+	}
+
+	string getSelectedObjectTag() {
+		return selectedTag;
+	}
+
+	GameObject getSelectedObject() {
+		return this.selectedObject;
 	}
 
 	private void BuildSingleTarget() {
@@ -91,8 +161,8 @@ public class BuildMenu : MonoBehaviour {
 		
 		if (Physics.Raycast (Camera.main.ScreenPointToRay (mousePos), out hit)) {
 			Debug.Log ("Raycast hit something");
-			if (hit.transform.name == "Wall(Clone)") {
-				Debug.Log ("Raycast hit Wall(Clone)");
+			if (getSelectedObjectTag() == "Wall") {
+				Debug.Log ("Raycast hit Wall");
 				// Add offset so tower is above walls
 				Instantiate (singleTargetTower, hit.transform.position+offset, hit.transform.rotation);
 			}
@@ -107,7 +177,7 @@ public class BuildMenu : MonoBehaviour {
 		Vector3 offset = new Vector3 (0, 1, 0);
 
 		if (Physics.Raycast (Camera.main.ScreenPointToRay (mousePos), out hit)) {
-			if(hit.transform.name == "Wall(Clone)") {
+			if(getSelectedObjectTag() == "Wall") {
 				Instantiate (multiTargetTower, hit.transform.position+offset, hit.transform.rotation);
 			}
 		}
