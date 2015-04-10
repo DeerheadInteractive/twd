@@ -6,6 +6,7 @@ public class TowerInfo : MonoBehaviour {
 	GameObject towerInfoPanel;
 	public GameObject buildMenuPanel;
 	public GameObject playerInfoPanel;
+	public GameObject objectCamera;
 	private GameObject selectedTower;
 
 	int towerDamage;
@@ -14,6 +15,7 @@ public class TowerInfo : MonoBehaviour {
 
 	RaycastHit hit;
 	Vector3 mousePos;
+	Vector3 newPos;
 
 	string selectedTowerType; // This will be Tower(Clone) or MultiShotTower(Clone)
 
@@ -42,6 +44,16 @@ public class TowerInfo : MonoBehaviour {
 		}
 
 		return;
+	}
+
+	void OnEnable() {
+		newPos = new Vector3 ((float)selectedTower.transform.position.x, objectCamera.transform.position.y, (float)selectedTower.transform.position.z);
+		//xPos = selectedTower.transform.position.x;
+		//yPos = selectedTower.transform.position.y;
+		Debug.Log ("Move to " + newPos);
+		objectCamera.SetActive (true);
+		objectCamera.GetComponent<UIObjectCamera> ().setCameraPosition (newPos);
+		Debug.Log ("moving object camera");
 	}
 
 	void setSelectedObject() {
@@ -75,7 +87,16 @@ public class TowerInfo : MonoBehaviour {
 		return this.selectedObject;
 	}
 
+	public void setSelectedTower(GameObject tower) {
+		this.selectedTower = tower;
+	}
+
+	GameObject getSelectedTower() {
+		return this.selectedTower;
+	}
+
 	public void backButtonClicked() {
+		objectCamera.SetActive (false);
 		buildMenuPanel.SetActive (true);
 		towerInfoPanel.SetActive (false);
 	}
@@ -107,8 +128,8 @@ public class TowerInfo : MonoBehaviour {
 	}
 
 	public void sellButtonClicked() {
-		getSelectedTower ().SetActive (false);
-		//DestroyImmediate (getSelectedTower ());
+		objectCamera.SetActive (false);
+		DestroyImmediate (getSelectedTower ());
 		//TODO: Increase money here
 		buildMenuPanel.SetActive (true);
 		towerInfoPanel.SetActive (false);
@@ -117,17 +138,6 @@ public class TowerInfo : MonoBehaviour {
 
 	public void setBuildMenu(GameObject menu) {
 		buildMenuPanel = menu;
-	}
-
-	// Getter/Setter for selectedTower
-	public void setSelectedTower(GameObject tower) {
-		this.selectedTower = tower;
-		this.selectedTowerType = tower.name;
-		Debug.Log ("Select tower name: " + this.selectedTowerType);
-	}
-
-	public GameObject getSelectedTower() {
-		return this.selectedTower;
 	}
 
 }

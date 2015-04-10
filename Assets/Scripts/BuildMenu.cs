@@ -11,6 +11,7 @@ public class BuildMenu : MonoBehaviour {
 	GameObject buildMenuPanel;
 	public GameObject towerInfoPanel;
 	public GameObject playerInfoPanel;
+	public GameObject objectCamera;
 
 	// Tower Prefabs
 	GameObject singleTargetTower;

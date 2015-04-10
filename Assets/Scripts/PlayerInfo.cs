@@ -7,13 +7,15 @@ public class PlayerInfo : MonoBehaviour {
 	GameObject playerInfoPanel;
 	public GameObject buildMenuPanel;
 	public GameObject towerInfoPanel;
-	private GameObject selectedTower;
+	public GameObject objectCamera;
+	GameObject player;
 
 	string selectedTag;
 	GameObject selectedObject;
 
 	RaycastHit hit;
 	Vector3 mousePos;
+	Vector3 newPos;
 
 	// Use this for initialization
 	void Start () {
@@ -35,6 +37,14 @@ public class PlayerInfo : MonoBehaviour {
 			// TODO: Enemies here
 			return;
 		}
+	}
+
+	void OnEnable() {
+		newPos = new Vector3 ((float)player.transform.position.x, objectCamera.transform.position.y, (float)player.transform.position.z);
+		Debug.Log ("Move to " + newPos);
+		objectCamera.SetActive (true);
+		objectCamera.GetComponent<UIObjectCamera> ().setCameraPosition (newPos);
+		Debug.Log ("moving object camera");
 	}
 
 	void setSelectedObject() {
@@ -68,7 +78,12 @@ public class PlayerInfo : MonoBehaviour {
 		return selectedObject;
 	}
 
+	public void setPlayerObject(GameObject player) {
+		this.player = player;
+	}
+
 	public void backButtonClicked() {
+		objectCamera.SetActive (false);
 		buildMenuPanel.SetActive (true);
 		playerInfoPanel.SetActive (false);
 		selectedTag = null;
