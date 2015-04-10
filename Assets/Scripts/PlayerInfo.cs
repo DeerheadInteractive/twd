@@ -24,6 +24,8 @@ public class PlayerInfo : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		updateObjectCamera ();
+
 		if (Input.GetMouseButtonDown (0)) {
 			setSelectedObject();
 
@@ -47,6 +49,11 @@ public class PlayerInfo : MonoBehaviour {
 		Debug.Log ("moving object camera");
 	}
 
+	void updateObjectCamera() {
+		Vector3 update = new Vector3 (player.transform.position.x, objectCamera.transform.position.y, player.transform.position.z);
+
+		objectCamera.transform.position = update;
+	}
 	void setSelectedObject() {
 		hit = new RaycastHit ();
 		mousePos = Input.mousePosition;

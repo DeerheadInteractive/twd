@@ -33,6 +33,7 @@ public class TowerInfo : MonoBehaviour {
 
 			if(getSelectedObjectTag() == "Tower") {
 				setSelectedTower(getSelectedObject ());
+				objectCamera.GetComponent<UIObjectCamera>().setCameraPosition(new Vector3(getSelectedObject().transform.position.x, objectCamera.transform.position.y, getSelectedObject().transform.position.z));
 			}
 			else if(getSelectedObjectTag() == "Player") {
 				playerInfoPanel.SetActive(true);
