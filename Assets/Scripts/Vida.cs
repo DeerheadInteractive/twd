@@ -16,9 +16,11 @@ public class Vida : MonoBehaviour {
 	public enum Owner{
 		FRIENDLY, ENEMY, NEUTRAL
 	}
+
 	void Start(){
 		//curHP = maxHP;//Can we remove this or add a tag so we can add wounded monsters?
 	}
+
 	void OnTriggerEnter(Collider other){
 		if (other.tag == "Boundary" || other.tag == "Tower")
 			return;
@@ -100,4 +102,5 @@ public class Vida : MonoBehaviour {
 			
 		}
 	}
+
 }

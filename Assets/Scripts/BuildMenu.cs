@@ -11,6 +11,7 @@ public class BuildMenu : MonoBehaviour {
 	GameObject buildMenuPanel;
 	public GameObject towerInfoPanel;
 	public GameObject playerInfoPanel;
+	public GameObject objectCamera;
 
 	// Tower Prefabs
 	GameObject singleTargetTower;
@@ -37,31 +38,6 @@ public class BuildMenu : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		// Check for left click then build single target tower
-		/*if (Input.GetMouseButtonDown (0) && singleTarget_isClicked && waitForInput) {
-			Debug.Log ("Entering BuildSingleTarget()");
-			BuildSingleTarget ();
-			singleTarget_isClicked = false;
-			waitForInput = false;
-			Debug.Log ("variables = false now");
-		}
-		// Check for left click, then build multi target tower
-		else if (Input.GetMouseButtonDown (0) && multiTarget_isClicked && waitForInput) {
-			Debug.Log("Entering BuildMultiTarget()");
-			BuildMultiTarget();
-			multiTarget_isClicked = false;
-			waitForInput = false;
-		}
-		// Select a tower or enemy
-		else if(Input.GetMouseButtonDown(0) && !waitForInput) {
-			if(setTower()) {
-				//selectedObject = getSelectedObject();
-				towerInfoPanel.SetActive(true);
-				//towerInfoPanel.GetComponent<TowerInfo>().setSelectedTower(selectedObject);
-				buildMenuPanel.SetActive(false);
-			}
-			setSelectedObjectTag();
-		}*/
 		if (Input.GetMouseButtonDown (0)) {
 			setSelectedObject();
 
@@ -76,7 +52,6 @@ public class BuildMenu : MonoBehaviour {
 					multiTarget_isClicked = false;
 					waitForInput = false;
 				}
-				return;
 				break;
 			case false:
 				if(getSelectedObjectTag() == "Tower") {
@@ -92,11 +67,10 @@ public class BuildMenu : MonoBehaviour {
 					selectedTag = null;
 					selectedObject = null;
 				}
-				return;
 				break;
-			default:
+			/*default:
 				Debug.Log ("this is bad");
-				break;
+				break;*/
 			}
 		}
 	}
