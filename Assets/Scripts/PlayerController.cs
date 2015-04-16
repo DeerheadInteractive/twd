@@ -4,10 +4,13 @@ using System.Collections;
 public class PlayerController : MonoBehaviour {
 	GameObject player;
 	public float speed;
+	public ArrayList enemiesInRange;
+	public ArrayList towersInRange;
 
-	void Start() 
-	{
-		 player = this.gameObject;
+	void Start() {
+		enemiesInRange = new ArrayList();
+		towersInRange = new ArrayList();
+		player = this.gameObject;
 	}
 
 	void FixedUpdate () {
@@ -17,32 +20,18 @@ public class PlayerController : MonoBehaviour {
 		rigidbody.velocity = move * speed;
 	}
 
-	void Update () {
+	void Update() {
 
-		/*
+	}
 
-		if (Input.GetKeyDown (KeyCode.S)) 
-		{
-
-			player.transform.position += new Vector3(0, 0, -1);
-
-
+	void OnTriggerStay(Collider other){
+		GameObject obj = other.transform.gameObject;
+		if (other.tag == "TowerSphere"){
+			towersInRange.Add(obj);
+		} else if (other.tag == "Enemy"){
+			enemiesInRange.Add(obj);
+		} else if (other.tag == "Tower"){
+			// We are ignoring this.
 		}
-		if(Input.GetKeyDown(KeyCode.W))
-		{
-			player.transform.position += new Vector3(0, 0, 1);
-		}
-
-		if(Input.GetKeyDown (KeyCode.A))
-		{
-			player.transform.position += new Vector3(-1, 0, 0); 
-		}
-
-		if(Input.GetKeyDown (KeyCode.D))
-		{
-			player.transform.position += new Vector3(1, 0, 0);
-		}
-		*/
-	
 	}
 }

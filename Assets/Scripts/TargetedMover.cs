@@ -24,7 +24,8 @@ public class TargetedMover : MonoBehaviour {
 		if (target != null){
 			targetDirection = target.transform.position - transform.position;
 		}
-		transform.forward = targetDirection;
+		if (targetDirection != Vector3.zero)
+			transform.forward = targetDirection;
 		//transform.rotation = Quaternion.LookRotation(targetDirection);
 		rigidbody.velocity = transform.forward * speed;
 	}

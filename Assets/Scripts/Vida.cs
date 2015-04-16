@@ -7,6 +7,9 @@ public class Vida : MonoBehaviour {
 	public int bounty = 5;
 	public int damageToPlayer = 1;
 	public float baseSpeed;
+	private float tempSlow;
+	private float tempSlowDuration;
+	private float speedModifier;
 	public float speed;
 	public Owner owner;
 	public GameObject explosion;
@@ -19,6 +22,24 @@ public class Vida : MonoBehaviour {
 	void Start(){
 		//curHP = maxHP;//Can we remove this or add a tag so we can add wounded monsters?
 	}
+
+	void Update(){
+		tempSlowDuration -= Time.deltaTime;
+		if (tempSlowDuration <= 0)
+			tempSlow = 1;
+		speed = baseSpeed * speedModifier * tempSlow;
+		speedModifier = 1.0f;
+	}
+
+	public void temporarySlow(float val, float duration){
+		tempSlow = val;
+		tempSlowDuration = duration;
+	}
+
+	public void modifySpeed(float val){
+		speedModifier *= val;
+	}
+
 	void OnTriggerEnter(Collider other){
 		if (other.tag == "Boundary" || other.tag == "Tower")
 			return;

@@ -109,11 +109,11 @@ public class GameController : MonoBehaviour {
 	public void GameOver(bool win){
 		gameOver = true;
 		if (win){
-			print ("End of level.");
+			print ("End of level. You won!");
 			animator.SetTrigger("GameOver");
 		} else{
 			animator.SetTrigger("GameOver");
-			print ("You lost? Pfft.");
+			print ("End of level. You lost? Pfft.");
 		}
 	}
 }
