@@ -10,6 +10,7 @@ public class GameController : MonoBehaviour {
 	public Queue waveInfo;
 	public int monsterCount = 0;
 	public float waveDelay;
+	public float startWaveDelay;
 
 	public int startingHealth;
 	public int startingMoney;
@@ -86,7 +87,9 @@ public class GameController : MonoBehaviour {
 					yield break;
 				yield return new WaitForSeconds(waveDelay);
 			} else{
+				// TODO: Display countdown on UI
 				isFirstWave = false;
+				yield return new WaitForSeconds(startWaveDelay);
 			}
 			Queue wave = (Queue)(waveInfo.Dequeue());
 			foreach (Vector3 batchInfo in wave){

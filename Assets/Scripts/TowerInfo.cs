@@ -69,6 +69,7 @@ public class TowerInfo : MonoBehaviour {
 		towerName.GetComponent<Text>().text = selectedTower.GetComponent<Gunnery> ().towerName;
 
 		// Update stats
+		Debug.Log ("updating stats");
 		updateStats ();
 	}
 
@@ -129,6 +130,7 @@ public class TowerInfo : MonoBehaviour {
 		// Update money
 		gc.updateMoney (-selectedTower.GetComponent<Gunnery> ().upgradeValue);
 
+		// TODO: Abstract this part - add damageUpgrade value to Gunnery script and then update selectedTower by damageUpgrade
 		// Upgrade tower
 		switch (selectedTower.gameObject.name) {
 			case "Tower(Clone)":
@@ -174,6 +176,7 @@ public class TowerInfo : MonoBehaviour {
 		//Debug.Log ("Damage Text: " + selectedTower.GetComponent<Gunnery> ().damage);
 		//Debug.Log ("Range Text: " + selectedTower.GetComponent<SphereCollider> ().radius);
 		//Debug.Log ("Sell Text: " + selectedTower.GetComponent<TowerStats> ().value);
+		towerName.GetComponent<Text> ().text = selectedTower.GetComponent<Gunnery> ().towerName;
 		damageText.GetComponent<Text> ().text = "Damage: " + selectedTower.GetComponent<Gunnery> ().damage;
 		rangeText.GetComponent<Text> ().text = "Range: " + selectedTower.GetComponent<SphereCollider> ().radius;
 		sellText.GetComponent<Text> ().text = "Sell Value: " + selectedTower.GetComponent<Gunnery> ().sellValue;
