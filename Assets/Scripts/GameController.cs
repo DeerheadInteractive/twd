@@ -22,7 +22,7 @@ public class GameController : MonoBehaviour {
 	public int wavenum;
 
 	private bool gameOver = false;
-
+	private bool isPaused = false;
 
 	private bool isFirstWave = true;
 	
@@ -33,6 +33,21 @@ public class GameController : MonoBehaviour {
 		updateHealth(0);
 		updateMoney(0);
 		//StartCoroutine(NextWave());
+	}
+
+	void Update(){
+		if (!gameOver && Input.GetKeyDown (KeyCode.P)){
+		    isPaused = !isPaused;
+			if (isPaused){
+				// Pause
+				Time.timeScale = 0.0f;
+				animator.SetTrigger("Pause");
+			} else{
+				// Unpause
+				Time.timeScale = 1.0f;
+				animator.SetTrigger("Pause");
+			}
+		}
 	}
 
 
@@ -117,4 +132,19 @@ public class GameController : MonoBehaviour {
 		}
 	}
 
+	// Button Handlers ----------------------------------------------------------------
+
+	public void PressedRestart(){
+		Application.LoadLevel(1);
+	}
+
+	public void PressedMainMenu(){
+		Application.LoadLevel(0);
+	}
+
+	public void PressedResume(){
+		isPaused = false;
+		Time.timeScale = 1.0f;
+		animator.SetTrigger("Pause");
+	}
 }
