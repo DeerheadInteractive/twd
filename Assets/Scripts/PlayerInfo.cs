@@ -42,9 +42,9 @@ public class PlayerInfo : MonoBehaviour {
 	}
 
 	void OnEnable() {
+		objectCamera.SetActive (true);
 		newPos = new Vector3 ((float)player.transform.position.x, objectCamera.transform.position.y, (float)player.transform.position.z);
 		Debug.Log ("Move to " + newPos);
-		objectCamera.SetActive (true);
 		objectCamera.GetComponent<UIObjectCamera> ().setCameraPosition (newPos);
 		Debug.Log ("moving object camera");
 	}

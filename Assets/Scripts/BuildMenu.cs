@@ -18,9 +18,13 @@ public class BuildMenu : MonoBehaviour {
 	GameObject multiTargetTower;
 
 	GameObject selectedObject;
+	GameController gc;
 
 	// Use this for initialization
 	void Start () {
+		gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+		objectCamera.SetActive (false);
+
 		// Initialize menu panels
 		buildMenuPanel = this.gameObject;
 		towerInfoPanel.SetActive (false);
@@ -142,6 +146,9 @@ public class BuildMenu : MonoBehaviour {
 			}
 		}
 
+		// Update money
+		gc.updateMoney (-singleTargetTower.GetComponent<Gunnery> ().buyValue);
+		
 		return;
 	}
 
@@ -155,16 +162,33 @@ public class BuildMenu : MonoBehaviour {
 				Instantiate (multiTargetTower, hit.transform.position+offset, hit.transform.rotation);
 			}
 		}
+
+		// Update money
+		gc.updateMoney (-singleTargetTower.GetComponent<Gunnery> ().buyValue);
+
+		return;
 	}
 
 	// Functions called by buttons
 	public void singleTargetClicked() {
+		// Can player afford the tower?
+		if (!gc.canAfford (singleTargetTower.GetComponent<Gunnery> ().buyValue)) {
+			Debug.Log("can't afford single target");
+			return;
+		}
+
 		singleTarget_isClicked = true;
 		multiTarget_isClicked = false;
 		waitForInput = true;
 	}
 
 	public void multiTargetClicked() {
+		// Can player afford the tower?
+		if (!gc.canAfford (multiTargetTower.GetComponent<Gunnery> ().buyValue)) {
+			Debug.Log("can't afford multi target");
+			return;
+		}
+
 		multiTarget_isClicked = true;
 		singleTarget_isClicked = false;
 		waitForInput = true;

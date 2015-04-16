@@ -10,6 +10,11 @@ public class Gunnery : MonoBehaviour {
 
 	public float damageMod;
 
+	public string towerName;
+	public int buyValue;
+	public int sellValue;
+	public int upgradeValue;
+
 	protected GameObject closestObj;
 	protected float closestDistance;
 

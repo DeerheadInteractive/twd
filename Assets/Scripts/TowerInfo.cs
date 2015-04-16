@@ -19,6 +19,7 @@ public class TowerInfo : MonoBehaviour {
 	int towerDamage;
 	string selectedTag;
 	GameObject selectedObject;
+	GameController gc;
 
 	RaycastHit hit;
 	Vector3 mousePos;
@@ -28,9 +29,9 @@ public class TowerInfo : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
 		towerInfoPanel = this.gameObject;
 		towerDamage = selectedTower.GetComponent<Gunnery> ().damage;
-		//buildMenuPanel = GameObject.Find ("Build");
 	}
 	
 	// Update is called once per frame
@@ -56,16 +57,16 @@ public class TowerInfo : MonoBehaviour {
 	}
 
 	void OnEnable() {
+		objectCamera.SetActive (true);
 		newPos = new Vector3 ((float)selectedTower.transform.position.x, objectCamera.transform.position.y, (float)selectedTower.transform.position.z);
 		//xPos = selectedTower.transform.position.x;
 		//yPos = selectedTower.transform.position.y;
 		Debug.Log ("Move to " + newPos);
-		objectCamera.SetActive (true);
 		objectCamera.GetComponent<UIObjectCamera> ().setCameraPosition (newPos);
 		Debug.Log ("moving object camera");
 
 		// Change to appropriate tower name
-		towerName.GetComponent<Text>().text = selectedTower.GetComponent<TowerStats> ().towerName;
+		towerName.GetComponent<Text>().text = selectedTower.GetComponent<Gunnery> ().towerName;
 
 		// Update stats
 		updateStats ();
@@ -117,6 +118,18 @@ public class TowerInfo : MonoBehaviour {
 	}
 
 	public void upgradeButtonClicked() {
+		// Can player afford upgrade?
+		if(!gc.canAfford(selectedTower.GetComponent<Gunnery>().upgradeValue)) {
+			Debug.Log ("can't afford upgrade");
+			return;
+		}
+
+		Debug.Log (selectedTower.GetComponent<Gunnery> ().upgradeValue);
+		// TODO: Change this to upgradeValue
+		// Update money
+		gc.updateMoney (-selectedTower.GetComponent<Gunnery> ().upgradeValue);
+
+		// Upgrade tower
 		switch (selectedTower.gameObject.name) {
 			case "Tower(Clone)":
 			// Update tower damage
@@ -145,6 +158,9 @@ public class TowerInfo : MonoBehaviour {
 	}
 
 	public void sellButtonClicked() {
+		// Update money
+		gc.updateMoney (selectedTower.GetComponent<Gunnery> ().sellValue);
+
 		objectCamera.SetActive (false);
 		DestroyImmediate (getSelectedTower ());
 		//TODO: Increase money here
@@ -160,7 +176,7 @@ public class TowerInfo : MonoBehaviour {
 		//Debug.Log ("Sell Text: " + selectedTower.GetComponent<TowerStats> ().value);
 		damageText.GetComponent<Text> ().text = "Damage: " + selectedTower.GetComponent<Gunnery> ().damage;
 		rangeText.GetComponent<Text> ().text = "Range: " + selectedTower.GetComponent<SphereCollider> ().radius;
-		sellText.GetComponent<Text> ().text = "Sell Value: " + selectedTower.GetComponent<TowerStats> ().sellValue;
+		sellText.GetComponent<Text> ().text = "Sell Value: " + selectedTower.GetComponent<Gunnery> ().sellValue;
 		return;
 	}
 
