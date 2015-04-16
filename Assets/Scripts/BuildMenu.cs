@@ -11,15 +11,20 @@ public class BuildMenu : MonoBehaviour {
 	GameObject buildMenuPanel;
 	public GameObject towerInfoPanel;
 	public GameObject playerInfoPanel;
+	public GameObject objectCamera;
 
 	// Tower Prefabs
 	GameObject singleTargetTower;
 	GameObject multiTargetTower;
 
 	GameObject selectedObject;
+	GameController gc;
 
 	// Use this for initialization
 	void Start () {
+		gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+		objectCamera.SetActive (false);
+
 		// Initialize menu panels
 		buildMenuPanel = this.gameObject;
 		towerInfoPanel.SetActive (false);
@@ -37,31 +42,6 @@ public class BuildMenu : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		// Check for left click then build single target tower
-		/*if (Input.GetMouseButtonDown (0) && singleTarget_isClicked && waitForInput) {
-			Debug.Log ("Entering BuildSingleTarget()");
-			BuildSingleTarget ();
-			singleTarget_isClicked = false;
-			waitForInput = false;
-			Debug.Log ("variables = false now");
-		}
-		// Check for left click, then build multi target tower
-		else if (Input.GetMouseButtonDown (0) && multiTarget_isClicked && waitForInput) {
-			Debug.Log("Entering BuildMultiTarget()");
-			BuildMultiTarget();
-			multiTarget_isClicked = false;
-			waitForInput = false;
-		}
-		// Select a tower or enemy
-		else if(Input.GetMouseButtonDown(0) && !waitForInput) {
-			if(setTower()) {
-				//selectedObject = getSelectedObject();
-				towerInfoPanel.SetActive(true);
-				//towerInfoPanel.GetComponent<TowerInfo>().setSelectedTower(selectedObject);
-				buildMenuPanel.SetActive(false);
-			}
-			setSelectedObjectTag();
-		}*/
 		if (Input.GetMouseButtonDown (0)) {
 			setSelectedObject();
 
@@ -76,7 +56,6 @@ public class BuildMenu : MonoBehaviour {
 					multiTarget_isClicked = false;
 					waitForInput = false;
 				}
-				return;
 				break;
 			case false:
 				if(getSelectedObjectTag() == "Tower") {
@@ -92,11 +71,10 @@ public class BuildMenu : MonoBehaviour {
 					selectedTag = null;
 					selectedObject = null;
 				}
-				return;
 				break;
-			default:
+			/*default:
 				Debug.Log ("this is bad");
-				break;
+				break;*/
 			}
 		}
 	}
@@ -168,6 +146,9 @@ public class BuildMenu : MonoBehaviour {
 			}
 		}
 
+		// Update money
+		gc.updateMoney (-singleTargetTower.GetComponent<Gunnery> ().buyValue);
+		
 		return;
 	}
 
@@ -181,16 +162,33 @@ public class BuildMenu : MonoBehaviour {
 				Instantiate (multiTargetTower, hit.transform.position+offset, hit.transform.rotation);
 			}
 		}
+
+		// Update money
+		gc.updateMoney (-singleTargetTower.GetComponent<Gunnery> ().buyValue);
+
+		return;
 	}
 
 	// Functions called by buttons
 	public void singleTargetClicked() {
+		// Can player afford the tower?
+		if (!gc.canAfford (singleTargetTower.GetComponent<Gunnery> ().buyValue)) {
+			Debug.Log("can't afford single target");
+			return;
+		}
+
 		singleTarget_isClicked = true;
 		multiTarget_isClicked = false;
 		waitForInput = true;
 	}
 
 	public void multiTargetClicked() {
+		// Can player afford the tower?
+		if (!gc.canAfford (multiTargetTower.GetComponent<Gunnery> ().buyValue)) {
+			Debug.Log("can't afford multi target");
+			return;
+		}
+
 		multiTarget_isClicked = true;
 		singleTarget_isClicked = false;
 		waitForInput = true;

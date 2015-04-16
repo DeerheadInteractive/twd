@@ -15,9 +15,11 @@ public class LevelLoader : MonoBehaviour {
 	public GameObject bridgeObj;
 	public GameObject groundObj;
 	public GameObject playerObj;
+	public GameObject playerInfoPanel;
 	public float groundHeight;
 	public float bridgeHeight;
 	public float playerHeight;
+	GameObject player;
 
 	public GameObject portalStart;
 	public GameObject portalEnd;
@@ -118,7 +120,8 @@ public class LevelLoader : MonoBehaviour {
 							break;
 						}
 						if (val == _PLAYER){
-							Instantiate(playerObj, new Vector3(x, playerHeight, y), Quaternion.identity);
+							player = (GameObject)Instantiate(playerObj, new Vector3(x, playerHeight, y), Quaternion.identity);
+							playerInfoPanel.GetComponent<PlayerInfo>().setPlayerObject(player);
 						}
 					}
 				}
