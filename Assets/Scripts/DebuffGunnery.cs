@@ -4,6 +4,7 @@ using System.Collections;
 public class DebuffGunnery : Gunnery {
 	public int targets;
 	public int slowMove;
+	public int slowMoveUpgrade;
 
 	private ArrayList inRange;  
 	//private GameObject closestObj;
@@ -76,6 +77,26 @@ public class DebuffGunnery : Gunnery {
 			RadiusDetected(obj);
 			print("slowing onstay");
 			other.GetComponent<Vida>().speed = other.GetComponent<Vida>().baseSpeed - slowMove;
+		}
+	}
+
+	void upgrade(int choice) {
+		switch (choice) {
+			// Upgrade damage
+		case 0:
+			slowMove += slowMoveUpgrade;
+			slowMoveUpgrade *= 2;
+			break;
+			// Upgrade range
+		case 1:
+			range += rangeUpgrade;
+			rangeUpgrade *= 2;
+			break;
+		// Upgrade rate of fire
+		case 2:
+			fireRate += rateOfFireUpgrade;
+			rateOfFireUpgrade *= 3;
+			break;
 		}
 	}
 }

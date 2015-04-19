@@ -4,7 +4,7 @@ using System.Collections;
 
 public class BuildMenu : MonoBehaviour {
 
-	public bool singleTarget_isClicked, multiTarget_isClicked, aoe_isClicked, pierce_isClicked, debuffSlow_isClicked, waitForInput;
+	public bool singleTarget_isClicked, multiTarget_isClicked, aoe_isClicked, dot_isClicked, debuffSlow_isClicked, waitForInput;
 	private string selectedTag;
 
 	// Menus
@@ -17,8 +17,9 @@ public class BuildMenu : MonoBehaviour {
 	GameObject singleTargetTower;
 	GameObject multiTargetTower;
 	GameObject aoeTower;
-	GameObject pierceTower;
-	GameObject debuffSlow;
+	//GameObject DOTTower;
+	GameObject debuffSlowTower;
+	GameObject towerToBuild;
 
 	GameObject selectedObject;
 	GameController gc;
@@ -37,14 +38,14 @@ public class BuildMenu : MonoBehaviour {
 		singleTargetTower = (GameObject)Resources.Load ("Tower");
 		multiTargetTower = (GameObject)Resources.Load ("MultiShotTower");
 		aoeTower = (GameObject)Resources.Load ("AoETower");
-		pierceTower = (GameObject)Resources.Load ("PierceTower");
-		debuffSlow = (GameObject)Resources.Load ("DebuffTower");
+		//DOTTower = (GameObject)Resources.Load ("DOTTower");
+		debuffSlowTower = (GameObject)Resources.Load ("DebuffTower");
 
 		// Initialize bools
 		singleTarget_isClicked = false;
 		multiTarget_isClicked = false;
 		aoe_isClicked = false;
-		pierce_isClicked = false;
+		//dot_isClicked = false;
 		debuffSlow_isClicked = false;
 		waitForInput = false;
 	}
@@ -56,22 +57,13 @@ public class BuildMenu : MonoBehaviour {
 
 			switch (waitForInput) {
 			case true:
-				if (singleTarget_isClicked) {
-					BuildSingleTarget();
-					singleTarget_isClicked = false;
-				} else if (multiTarget_isClicked) {
-					BuildMultiTarget();
-					multiTarget_isClicked = false;
-				} /*else if (multiTarget_isClicked) {
-					BuildMultiTarget();
-					multiTarget_isClicked = false;
-				} else if (multiTarget_isClicked) {
-					BuildMultiTarget();
-					multiTarget_isClicked = false;
-				} else if (multiTarget_isClicked) {
-					BuildMultiTarget();
-					multiTarget_isClicked = false;
-				}*/
+				BuildTower();
+
+				singleTarget_isClicked = true;
+				multiTarget_isClicked = false;
+				aoe_isClicked = false;
+				//dot_isClicked = false;
+				debuffSlow_isClicked = false;
 
 				waitForInput = false;
 				break;
@@ -97,25 +89,17 @@ public class BuildMenu : MonoBehaviour {
 		}
 	}
 
-	/*bool setTower() {
-		RaycastHit hit = new RaycastHit ();
-		Vector3 mousePos = Input.mousePosition;
+	void OnEnable() {
+		objectCamera.SetActive (false);
 
-		GameObject rayObj, tower;
+		singleTarget_isClicked = true;
+		multiTarget_isClicked = false;
+		aoe_isClicked = false;
+		//dot_isClicked = false;
+		debuffSlow_isClicked = false;
 
-		// Did the raycast hit an object?
-		if(Physics.Raycast (Camera.main.ScreenPointToRay(mousePos), out hit)) {
-			rayObj = hit.collider.gameObject;
-			// Was the object clicked a tower?
-			if(rayObj.transform.parent.tag == "Tower") {
-				tower = rayObj.transform.parent.gameObject;
-				towerInfoPanel.GetComponent<TowerInfo>().setSelectedTower(tower);
-				return true;
-			}
-		}
-
-		return false;
-	}*/
+		selectedObject = null;
+	}
 
 	// Getter and Setter for selected object tag
 	void setSelectedObject() {
@@ -139,19 +123,11 @@ public class BuildMenu : MonoBehaviour {
 		return;
 	}
 
-	string getSelectedObjectTag() {
-		return selectedTag;
-	}
-
-	GameObject getSelectedObject() {
-		return this.selectedObject;
-	}
-
-	private void BuildSingleTarget() {
-		Debug.Log ("Entered BuildSingleTarget()");
+	void BuildTower() {
+		Debug.Log ("Entered BuildTower");
 		
 		RaycastHit hit = new RaycastHit();
-
+		
 		Vector3 mousePos = Input.mousePosition;
 		Vector3 offset = new Vector3 (0, 1, 0);
 		
@@ -160,31 +136,22 @@ public class BuildMenu : MonoBehaviour {
 			if (getSelectedObjectTag() == "Wall") {
 				Debug.Log ("Raycast hit Wall");
 				// Add offset so tower is above walls
-				Instantiate (singleTargetTower, hit.transform.position+offset, hit.transform.rotation);
-
+				Instantiate (towerToBuild, hit.transform.position+offset, hit.transform.rotation);
+				
 				// Update money
-				gc.updateMoney (-singleTargetTower.GetComponent<Gunnery> ().buyValue);
+				gc.updateMoney (-towerToBuild.GetComponent<Gunnery> ().buyValue);
 			}
 		}
 		
 		return;
 	}
 
-	private void BuildMultiTarget() {
-		RaycastHit hit = new RaycastHit ();
-		Vector3 mousePos = Input.mousePosition;
-		Vector3 offset = new Vector3 (0, 1, 0);
+	string getSelectedObjectTag() {
+		return selectedTag;
+	}
 
-		if (Physics.Raycast (Camera.main.ScreenPointToRay (mousePos), out hit)) {
-			if(getSelectedObjectTag() == "Wall") {
-				Instantiate (multiTargetTower, hit.transform.position+offset, hit.transform.rotation);
-
-				// Update money
-				gc.updateMoney (-singleTargetTower.GetComponent<Gunnery> ().buyValue);
-			}
-		}
-
-		return;
+	GameObject getSelectedObject() {
+		return this.selectedObject;
 	}
 
 	// Functions called by buttons
@@ -195,10 +162,12 @@ public class BuildMenu : MonoBehaviour {
 			return;
 		}
 
+		towerToBuild = singleTargetTower;
+
 		singleTarget_isClicked = true;
 		multiTarget_isClicked = false;
 		aoe_isClicked = false;
-		pierce_isClicked = false;
+		dot_isClicked = false;
 		debuffSlow_isClicked = false;
 		waitForInput = true;
 	}
@@ -210,10 +179,12 @@ public class BuildMenu : MonoBehaviour {
 			return;
 		}
 
+		towerToBuild = multiTargetTower;
+
 		singleTarget_isClicked = false;
 		multiTarget_isClicked = true;
 		aoe_isClicked = false;
-		pierce_isClicked = false;
+		dot_isClicked = false;
 		debuffSlow_isClicked = false;
 		waitForInput = true;
 	}
@@ -224,41 +195,47 @@ public class BuildMenu : MonoBehaviour {
 			Debug.Log("can't afford single target");
 			return;
 		}
-		
+
+		towerToBuild = aoeTower;
+
 		singleTarget_isClicked = false;
 		multiTarget_isClicked = false;
 		aoe_isClicked = true;
-		pierce_isClicked = false;
+		dot_isClicked = false;
 		debuffSlow_isClicked = false;
 		waitForInput = true;
 	}
 
-	public void pierceClicked() {
+	/*public void dotClicked() {
 		// Can player afford the tower?
-		if (!gc.canAfford (pierceTower.GetComponent<Gunnery> ().buyValue)) {
+		if (!gc.canAfford (DOTTower.GetComponent<Gunnery> ().buyValue)) {
 			Debug.Log("can't afford single target");
 			return;
 		}
-		
+
+		towerToBuild = pierceTower;
+
 		singleTarget_isClicked = false;
 		multiTarget_isClicked = false;
 		aoe_isClicked = false;
 		pierce_isClicked = true;
 		debuffSlow_isClicked = false;
 		waitForInput = true;
-	}
+	}*/
 
 	public void debuffSlowClicked() {
 		// Can player afford the tower?
-		if (!gc.canAfford (debuffSlow.GetComponent<Gunnery> ().buyValue)) {
+		if (!gc.canAfford (debuffSlowTower.GetComponent<Gunnery> ().buyValue)) {
 			Debug.Log("can't afford single target");
 			return;
 		}
-		
+
+		towerToBuild = debuffSlowTower;
+
 		singleTarget_isClicked = false;
 		multiTarget_isClicked = false;
 		aoe_isClicked = false;
-		pierce_isClicked = false;
+		dot_isClicked = false;
 		debuffSlow_isClicked = true;
 		waitForInput = true;
 	}

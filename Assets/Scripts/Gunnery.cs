@@ -13,7 +13,13 @@ public class Gunnery : MonoBehaviour {
 	public string towerName;
 	public int buyValue;
 	public int sellValue;
-	public int upgradeValue;
+	public int damageUpgradeValue;
+	public int slowRateUpgradeValue;
+	public int rangeUpgradeValue;
+	public int rateOfFireUpgradeValue;
+	public int damageUpgrade;
+	public int rangeUpgrade;
+	public int rateOfFireUpgrade;
 
 	protected GameObject closestObj;
 	protected float closestDistance;
@@ -87,8 +93,28 @@ public class Gunnery : MonoBehaviour {
 		}
 	}
 
-	public void updateDamage(int update) {
+	/*public void updateDamage(int update) {
 		damage = damage + update;
 		Debug.Log ("Damage (Gunnery): " + damage);
+	}*/
+
+	public void upgrade(int choice) {
+		switch (choice) {
+		// Upgrade damage
+		case 0:
+			damage += damageUpgrade;
+			damageUpgrade *= 2;
+			break;
+		// Upgrade range
+		case 1:
+			range += rangeUpgrade;
+			rangeUpgrade *= 2;
+			break;
+		case 2:
+			fireRate += rateOfFireUpgrade;
+			rateOfFireUpgrade *= 3;
+			break;
+		}
 	}
+
 }

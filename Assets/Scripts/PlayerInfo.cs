@@ -42,11 +42,15 @@ public class PlayerInfo : MonoBehaviour {
 	}
 
 	void OnEnable() {
-		objectCamera.SetActive (true);
-		newPos = new Vector3 ((float)player.transform.position.x, objectCamera.transform.position.y, (float)player.transform.position.z);
-		Debug.Log ("Move to " + newPos);
-		objectCamera.GetComponent<UIObjectCamera> ().setCameraPosition (newPos);
-		Debug.Log ("moving object camera");
+		if (player) {
+			objectCamera.SetActive (true);
+			newPos = new Vector3 ((float)player.transform.position.x, objectCamera.transform.position.y, (float)player.transform.position.z);
+			Debug.Log ("Move to " + newPos);
+			objectCamera.GetComponent<UIObjectCamera> ().setCameraPosition (newPos);
+			Debug.Log ("moving object camera");
+		} else {
+			Debug.Log ("No player");
+		}
 	}
 
 	void updateObjectCamera() {
