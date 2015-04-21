@@ -11,6 +11,16 @@ public class Abilities : MonoBehaviour
 	public float slowDuration;
 	public GameObject slowVisualEffect;
 
+	// Upgrade values
+	public float slowUpgrade;
+	public float damageUpgrade;
+	public int rangeUpgrade;
+	public float cooldownUpgrade;
+	public int slowUpgradeValue;
+	public int damageUpgradeValue;
+	public int rangeUpgradeValue;
+	public int cooldownUpgradeValue;
+
 	void Start () 
 	{
 
@@ -51,5 +61,32 @@ public class Abilities : MonoBehaviour
 		controller.enemiesInRange.Clear ();
 		controller.towersInRange.Clear ();	
 
+	}
+
+	public void upgrade(int choice) {
+		switch (choice) {
+		// Upgrade damage buff
+		case 0:
+			dmgUp += damageUpgrade;
+			damageUpgradeValue += 50;
+			break;
+		// Upgrade slow debuff
+		case 1:
+			slowAmount -= slowUpgrade;
+			slowUpgradeValue += 100;
+			break;
+		// Upgrade cooldown
+		case 2:
+			slowCooldown -= cooldownUpgrade;
+			cooldownUpgradeValue += 150;
+			break;
+		// Upgrade range
+		case 3:
+			this.gameObject.GetComponent<SphereCollider>().radius += rangeUpgrade;
+			rangeUpgradeValue += 75;
+			break;
+		}
+
+		return;
 	}
 }

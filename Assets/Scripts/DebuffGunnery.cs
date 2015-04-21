@@ -5,6 +5,7 @@ public class DebuffGunnery : Gunnery {
 	public int targets;
 	public int slowMove;
 	public int slowMoveUpgrade;
+	int towerNameMark = 1;
 
 	private ArrayList inRange;  
 	//private GameObject closestObj;
@@ -98,5 +99,8 @@ public class DebuffGunnery : Gunnery {
 			rateOfFireUpgrade *= 3;
 			break;
 		}
+
+		towerNameMark++;
+		towerName = towerName.Substring (0, towerName.Length - 1) + towerNameMark.ToString ();
 	}
 }

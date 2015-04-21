@@ -100,8 +100,7 @@ public class BuildMenu : MonoBehaviour {
 
 		selectedObject = null;
 	}
-
-	// Getter and Setter for selected object tag
+	
 	void setSelectedObject() {
 		RaycastHit hit = new RaycastHit ();
 		Vector3 mousePos = Input.mousePosition;

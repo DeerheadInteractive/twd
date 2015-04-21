@@ -11,6 +11,7 @@ public class Gunnery : MonoBehaviour {
 	public float damageMod;
 
 	public string towerName;
+	int towerNameMark = 1;
 	public int buyValue;
 	public int sellValue;
 	public int damageUpgradeValue;
@@ -19,7 +20,7 @@ public class Gunnery : MonoBehaviour {
 	public int rateOfFireUpgradeValue;
 	public int damageUpgrade;
 	public int rangeUpgrade;
-	public int rateOfFireUpgrade;
+	public float rateOfFireUpgrade;
 
 	protected GameObject closestObj;
 	protected float closestDistance;
@@ -93,28 +94,26 @@ public class Gunnery : MonoBehaviour {
 		}
 	}
 
-	/*public void updateDamage(int update) {
-		damage = damage + update;
-		Debug.Log ("Damage (Gunnery): " + damage);
-	}*/
-
 	public void upgrade(int choice) {
 		switch (choice) {
 		// Upgrade damage
 		case 0:
 			damage += damageUpgrade;
-			damageUpgrade *= 2;
+			damageUpgradeValue *= 2;
 			break;
 		// Upgrade range
 		case 1:
 			range += rangeUpgrade;
-			rangeUpgrade *= 2;
+			rangeUpgradeValue *= 2;
 			break;
 		case 2:
-			fireRate += rateOfFireUpgrade;
-			rateOfFireUpgrade *= 3;
+			fireRate -= rateOfFireUpgrade;
+			rateOfFireUpgradeValue *= 3;
 			break;
 		}
+
+		towerNameMark++;
+		towerName = towerName.Substring (0, towerName.Length - 1) + towerNameMark.ToString ();
 	}
 
 }

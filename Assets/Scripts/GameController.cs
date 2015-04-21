@@ -78,7 +78,7 @@ public class GameController : MonoBehaviour {
 	public void updateMoney(int val){
 		money += val;
 		Text txt = moneyText.GetComponent<Text>();
-		txt.text = "Money: " + money;
+		txt.text = "Nanites: " + money;
 	}
 
 	public bool canAfford(int val){

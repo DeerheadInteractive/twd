@@ -131,6 +131,7 @@ public class TowerInfo : MonoBehaviour {
 		rangeText.GetComponent<Text> ().text = "Range: " + selectedTower.GetComponent<Gunnery> ().range;
 		rateOfFireText.GetComponent<Text> ().text = "Rate Of Fire: " + selectedTower.GetComponent<Gunnery> ().fireRate;
 		sellText.GetComponent<Text> ().text = "Sell Value: " + selectedTower.GetComponent<Gunnery> ().sellValue;
+
 		return;
 	}
 	
@@ -144,16 +145,12 @@ public class TowerInfo : MonoBehaviour {
 
 	public void setSelectedTower(GameObject tower) {
 		this.selectedTower = tower;
+
+		return;
 	}
 
 	GameObject getSelectedTower() {
 		return this.selectedTower;
-	}
-
-	public void backButtonClicked() {
-		objectCamera.SetActive (false);
-		buildMenuPanel.SetActive (true);
-		towerInfoPanel.SetActive (false);
 	}
 
 	public void upgradeButtonClicked() {
@@ -168,45 +165,8 @@ public class TowerInfo : MonoBehaviour {
 
 		rangeUpgradeButton.gameObject.SetActive (true);
 		rateOfFireUpgradeButton.gameObject.SetActive (true);
-		// Can player afford upgrade?
-		/*if(!gc.canAfford(selectedTower.GetComponent<Gunnery>().upgradeValue)) {
-			Debug.Log ("can't afford upgrade");
-			return;
-		}
 
-		Debug.Log (selectedTower.GetComponent<Gunnery> ().upgradeValue);
-		// TODO: Change this to upgradeValue
-		// Update money
-		gc.updateMoney (-selectedTower.GetComponent<Gunnery> ().upgradeValue);
-
-		// TODO: Add buttons to tower menu for damage, range, and rate of fire upgrades
-		// Upgrade tower
-		switch (selectedTowerName) {
-			case "Tower(Clone)":
-			// Update tower damage
-			selectedTower.GetComponent<Gunnery>().upgrade(0);
-
-			// Return to build menu
-			buildMenuPanel.SetActive(true);
-			towerInfoPanel.SetActive(false);
-			break;
-
-			case "MultiShotTower(Clone)":
-			// Update tower damage
-			selectedTower.GetComponent<MultiShotGunnery>().upgrade (0);
-
-			// Return to build menu
-			buildMenuPanel.SetActive(true);
-			towerInfoPanel.SetActive(false);				
-			break;
-
-			default:
-			Debug.Log("this is bad");
-			break;
-		}
-
-		updateStats ();
-		*/
+		return;
 	}
 
 	public void damageUpgradeClicked() {
@@ -333,6 +293,16 @@ public class TowerInfo : MonoBehaviour {
 		buildMenuPanel.SetActive (true);
 		towerInfoPanel.SetActive (false);
 		Debug.Log ("End of sell");
+
+		return;
+	}
+
+	public void backButtonClicked() {
+		objectCamera.SetActive (false);
+		buildMenuPanel.SetActive (true);
+		towerInfoPanel.SetActive (false);
+		
+		return;
 	}
 
 }
