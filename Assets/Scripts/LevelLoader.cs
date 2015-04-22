@@ -17,6 +17,7 @@ public class LevelLoader : MonoBehaviour {
 	public GameObject playerObj;
 	public GameObject playerInfoPanel;
 	public float groundHeight;
+	public float wallHeight;
 	public float bridgeHeight;
 	public float playerHeight;
 	GameObject player;
@@ -109,7 +110,7 @@ public class LevelLoader : MonoBehaviour {
 						switch (val){
 						case _WALL:
 						case _PLAYER:
-							Instantiate(wallObj, new Vector3(x, 0, y), Quaternion.identity);
+							Instantiate(wallObj, new Vector3(x, wallHeight, y), Quaternion.identity);
 							break;
 						case _BRIDGE:
 							GameObject bridgeInstance = Instantiate(bridgeObj, new Vector3(x, bridgeHeight, y), new Quaternion(0,0,0,0)) as GameObject;

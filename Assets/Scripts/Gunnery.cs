@@ -9,6 +9,8 @@ public class Gunnery : MonoBehaviour {
 	public float shotSpeed;
 
 	public float damageMod;
+	public float lastDamageMod;
+	public bool isCounted;
 
 	public string towerName;
 	int towerNameMark = 1;
@@ -38,6 +40,7 @@ public class Gunnery : MonoBehaviour {
 			lastFire = Time.time;
 			Shoot();
 		}
+		lastDamageMod = damageMod;
 
 		// Clear closest distance and object.
 		closestDistance = -1;

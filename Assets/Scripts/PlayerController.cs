@@ -26,12 +26,15 @@ public class PlayerController : MonoBehaviour {
 
 	void OnTriggerStay(Collider other){
 		GameObject obj = other.transform.gameObject;
-		if (other.tag == "TowerSphere"){
-			towersInRange.Add(obj);
+		if (other.tag == "Tower" && obj.transform.parent != null){
+			Gunnery g = obj.transform.parent.gameObject.GetComponent<Gunnery>();
+			if (!g.isCounted)
+				towersInRange.Add(obj);
+			g.isCounted = true;
 		} else if (other.tag == "Enemy"){
 			enemiesInRange.Add(obj);
-		} else if (other.tag == "Tower"){
+		}/* else if (other.tag == "Tower"){
 			// We are ignoring this.
-		}
+		}*/
 	}
 }
