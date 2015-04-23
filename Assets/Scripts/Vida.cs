@@ -16,6 +16,7 @@ public class Vida : MonoBehaviour {
 	public int regenRate;
 	public GameObject spawned;
 	public float deathTimer;
+	public GameObject healthBar;
 	public enum Owner{
 		FRIENDLY, ENEMY, NEUTRAL
 	}
@@ -30,6 +31,14 @@ public class Vida : MonoBehaviour {
 			tempSlow = 1;
 		speed = baseSpeed * speedModifier * tempSlow;
 		speedModifier = 1.0f;
+		//Vida vida = this;
+		//Vector3 screenPos = camera.WorldToScreenPoint(vida.transform.position);
+		//vida.GetComponent<TextMesh> ().text = curHP + "/" + maxHP;
+		if(healthBar!=null)
+		{
+			healthBar.GetComponent<TextMesh> ().text = curHP.ToString();
+		}
+
 	}
 
 	public void temporarySlow(float val, float duration){
