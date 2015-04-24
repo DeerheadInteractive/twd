@@ -99,6 +99,9 @@ public class BuildMenu : MonoBehaviour {
 		debuffSlow_isClicked = false;
 
 		selectedObject = null;
+
+		towerInfoPanel.SetActive (false);
+		playerInfoPanel.SetActive (false);
 	}
 	
 	void setSelectedObject() {
