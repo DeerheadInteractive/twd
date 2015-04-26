@@ -29,7 +29,8 @@ public class LevelLoader : MonoBehaviour {
 	private const int _PLAYER = 3;
 
 	void Start () {
-		levelName = Globals.levelName;
+		if (Globals.levelName != null)
+			levelName = Globals.levelName;
 		if (Load(stringToStream(levelName))){
 			print ("Loaded " + levelName + " successfully.");
 			GameController gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();

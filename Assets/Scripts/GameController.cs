@@ -17,6 +17,7 @@ public class GameController : MonoBehaviour {
 	public GameObject healthText;
 	public GameObject moneyText;
 	public GameObject waveText;
+	public GameObject UIControllerObject;
 
 	public int health;
 	public int money;
@@ -131,13 +132,7 @@ public class GameController : MonoBehaviour {
 
 	public void GameOver(bool win){
 		gameOver = true;
-		if (win){
-			print ("End of level. You won!");
-			animator.SetTrigger("GameOver");
-		} else{
-			animator.SetTrigger("GameOver");
-			print ("End of level. You lost? Pfft.");
-		}
+		UIControllerObject.GetComponent<UIController>().GameOver(win);
 	}
 
 	// Button Handlers ----------------------------------------------------------------
