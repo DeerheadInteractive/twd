@@ -7,8 +7,7 @@ using System.IO;
 /// Uses StreamReader, though TextAsset is recommended.
 /// </summary>
 public class LevelLoader : MonoBehaviour {
-	private static string levelPrefix = "Assets/LevelData/";
-	private static string levelSuffix = ".txt";
+	private static string levelPrefix = "LevelData/";
 	public string levelName;
 	public GameObject wallObj;
 	public GameObject invisWallObj;
@@ -30,20 +29,34 @@ public class LevelLoader : MonoBehaviour {
 	private const int _PLAYER = 3;
 
 	void Start () {
-		if (Load(levelPrefix + levelName + levelSuffix)){
+		levelName = Globals.levelName;
+		if (Load(stringToStream(levelName))){
 			print ("Loaded " + levelName + " successfully.");
 			GameController gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
-			gc.updateMonsterCount(0);
+			gc.launch();
 		} else{
 			print ("Error loading level " + levelName + ".");
 		}
 	}
 
-	private bool Load(string fileName){
+	private Stream stringToStream(string name){
+		TextAsset textAsset = Resources.Load(levelPrefix + name) as TextAsset;
+		if (textAsset == null){
+			print ("Error: Could not load resource " + levelPrefix + name);
+		}
+		MemoryStream stream = new MemoryStream();
+		StreamWriter writer = new StreamWriter(stream);
+		writer.Write(textAsset.text);
+		writer.Flush();
+		stream.Position = 0;
+		return stream;
+	}
+
+	private bool Load(Stream stream){
 		try
 		{
 			Tokenizer tokenizer = new Tokenizer("");
-			StreamReader reader = new StreamReader(fileName);
+			StreamReader reader = new StreamReader(stream);
 			using (reader)
 			{
 				tokenizer.ResetWithString(reader.ReadLine());

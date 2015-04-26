@@ -26,14 +26,15 @@ public class GameController : MonoBehaviour {
 	private bool isPaused = false;
 
 	private bool isFirstWave = true;
+	private Queue curWave;
 	
 	void Start () {
 		monsterCount = 0;
 		health = startingHealth;
 		money = startingMoney;
+		updateMonsterCount(0);
 		updateHealth(0);
 		updateMoney(0);
-		//StartCoroutine(NextWave());
 	}
 
 	void Update(){
@@ -55,8 +56,11 @@ public class GameController : MonoBehaviour {
 	//TODO POTENTIAL BUG: Need to make sure we account for spawner enemies?
 	public void updateMonsterCount(int val){
 		monsterCount += val;
-		if (monsterCount <= 0){
-			StartCoroutine(NextWave());
+		if (monsterCount < 1){
+			if (curWave != null && curWave.Count < 1 && waveInfo.Count < 1){
+				gameOver = true;
+				GameOver(true);
+			}
 		}
 	}
 
@@ -71,6 +75,7 @@ public class GameController : MonoBehaviour {
 		txt.text = "Health: " + health;
 
 		if (health == 0){
+			gameOver = true;
 			GameOver(false);
 		}
 	}
@@ -91,23 +96,23 @@ public class GameController : MonoBehaviour {
 		txt.text = "Wave: " + wavenum;
 	}
 
+	public void launch(){
+		StartCoroutine(NextWave());
+	}
+
 
 	IEnumerator NextWave(){
 		if (gameOver)
 			yield break;
 		if (waveInfo.Count > 0){
-			updateWave();
-			if (!isFirstWave){
-				if (gameOver)
-					yield break;
-				yield return new WaitForSeconds(waveDelay);
-			} else{
+			if (isFirstWave){
 				// TODO: Display countdown on UI
 				isFirstWave = false;
 				yield return new WaitForSeconds(startWaveDelay);
 			}
-			Queue wave = (Queue)(waveInfo.Dequeue());
-			foreach (Vector3 batchInfo in wave){
+			curWave = (Queue)(waveInfo.Dequeue());
+			updateWave();
+			foreach (Vector3 batchInfo in curWave){
 				for (int i = 0; i < batchInfo.y; ++i){
 					if (gameOver)
 						yield break;
@@ -117,9 +122,9 @@ public class GameController : MonoBehaviour {
 					yield return new WaitForSeconds(batchInfo.z);
 				}
 			}
-			yield break;
+			yield return new WaitForSeconds(waveDelay);
 		} else{
-			GameOver(true);
+			//GameOver(true);
 			yield break;
 		}
 	}
