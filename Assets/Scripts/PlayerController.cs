@@ -2,7 +2,6 @@
 using System.Collections;
 
 public class PlayerController : MonoBehaviour {
-	GameObject player;
 	public float speed;
 	public ArrayList enemiesInRange;
 	public ArrayList towersInRange;
@@ -10,7 +9,6 @@ public class PlayerController : MonoBehaviour {
 	void Start() {
 		enemiesInRange = new ArrayList();
 		towersInRange = new ArrayList();
-		player = this.gameObject;
 	}
 
 	void FixedUpdate () {

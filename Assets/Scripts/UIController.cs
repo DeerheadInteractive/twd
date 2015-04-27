@@ -11,6 +11,7 @@ public class UIController : MonoBehaviour {
 	private float pausedVolume = 0.35f;
 	private float musicVolume = 0.95f;
 
+	public GameObject tooltip;
 	public GameObject gameOverPanel;
 	public GameObject pausePanel;
 	public GameObject swapFader;
@@ -65,6 +66,14 @@ public class UIController : MonoBehaviour {
 			// Done swapping
 			isSwapping = false;
 		}
+	}
+
+	public void showTooltip(Vector3 pos, Gunnery gn){
+		tooltip.SetActive(true);
+	}
+
+	public void hideTooltip(){
+		tooltip.SetActive(false);
 	}
 
 	public void GameOver(bool win){

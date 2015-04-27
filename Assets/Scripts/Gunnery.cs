@@ -98,7 +98,7 @@ public class Gunnery : MonoBehaviour {
 		}
 	}
 
-	public void upgrade(int choice) {
+	public virtual void upgrade(int choice) {
 		switch (choice) {
 		// Upgrade damage
 		case 0:

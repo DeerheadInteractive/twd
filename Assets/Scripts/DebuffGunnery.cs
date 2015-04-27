@@ -68,11 +68,11 @@ public class DebuffGunnery : Gunnery {
 	/// </summary>
 	/// <param name="obj">An object within firing range</param>
 	/// 
-	public void RadiusDetected(GameObject obj){
+	public override void RadiusDetected(GameObject obj){
 		inRange.Add (obj);
 	}
 
-	void OnTriggerStay(Collider other){
+	protected override void OnTriggerStay(Collider other){
 		GameObject obj = other.transform.gameObject;
 		if (other.tag == "Enemy"){
 			RadiusDetected(obj);
@@ -81,7 +81,7 @@ public class DebuffGunnery : Gunnery {
 		}
 	}
 
-	void upgrade(int choice) {
+	public override void upgrade(int choice) {
 		switch (choice) {
 			// Upgrade damage
 		case 0:

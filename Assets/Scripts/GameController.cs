@@ -24,7 +24,6 @@ public class GameController : MonoBehaviour {
 	public int wavenum;
 
 	private bool gameOver = false;
-	private bool isPaused = false;
 
 	private bool isFirstWave = true;
 	private Queue curWave;

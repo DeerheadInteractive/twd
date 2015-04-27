@@ -66,11 +66,11 @@ public class BuffGunnery : Gunnery {
 	/// </summary>
 	/// <param name="obj">An object within firing range</param>
 	/// 
-	public void RadiusDetected(GameObject obj){
+	public override void RadiusDetected(GameObject obj){
 		//inRange.Add (obj);
 	}
 
-	void OnTriggerStay(Collider other){
+	protected override void OnTriggerStay(Collider other){
 		//if (other.tag != "Untagged" && other.tag != "Enemy")
 		//	print (other.tag);
 		GameObject obj = other.transform.gameObject;
