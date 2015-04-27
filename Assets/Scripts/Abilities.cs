@@ -26,7 +26,7 @@ public class Abilities : MonoBehaviour
 
 		controller = transform.gameObject.GetComponent<PlayerController> ();
 		if (controller == null){
-			print ("no controlllerr");
+			print ("Error: Player controller not found.");
 		}
 	}
 
@@ -48,17 +48,14 @@ public class Abilities : MonoBehaviour
 		// Passive buff
 		foreach (GameObject obj in controller.towersInRange){
 			if (obj.transform.parent != null && obj.transform.parent.gameObject != null){
-				print ("something has a parent.");
 				GameObject parent = obj.transform.parent.gameObject;
 				Gunnery g = parent.GetComponent<Gunnery>();
 				if (g != null){
-					print ("increasing damageMod");	
 					g.increaseDamageMod(dmgUp);
 					g.isCounted = false;
 				}
 			}
 		}
-		print (controller.towersInRange.Count);
 		controller.enemiesInRange.Clear ();
 		controller.towersInRange.Clear ();	
 

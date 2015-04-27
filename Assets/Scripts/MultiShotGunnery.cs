@@ -50,13 +50,12 @@ public class MultiShotGunnery : Gunnery {
 	/// Sets the given object to be our next target if it is the closest object.
 	/// </summary>
 	/// <param name="obj">An object within firing range</param>
-	/// 
-	public void RadiusDetected(GameObject obj){
+	public override void RadiusDetected(GameObject obj){
 		if (obj != null)
 			inRange.Add (obj);
 	}
 
-	void OnTriggerStay(Collider other){
+	protected override void OnTriggerStay(Collider other){
 		GameObject obj = other.transform.gameObject;
 		if (other.tag == "Enemy"){
 			//GameObject self = GetComponent<Collider>().gameObject;

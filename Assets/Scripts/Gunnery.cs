@@ -13,7 +13,7 @@ public class Gunnery : MonoBehaviour {
 	public bool isCounted;
 
 	public string towerName;
-	int towerNameMark = 1;
+	protected int towerNameMark = 1;
 	public int buyValue;
 	public int sellValue;
 	public int damageUpgradeValue;
@@ -69,6 +69,7 @@ public class Gunnery : MonoBehaviour {
 		Vida shotVida = myShot.GetComponent<Vida>();
 		shotVida.damage = (int)((float)damage * damageMod);
 		shotVida.owner = Vida.Owner.FRIENDLY;
+		GetComponent<AudioSource>().Play();
 	}
 
 	public void increaseDamageMod(float val){
@@ -80,7 +81,7 @@ public class Gunnery : MonoBehaviour {
 	/// </summary>
 	/// <param name="obj">An object within firing range</param>
 	/// 
-	public void RadiusDetected(GameObject obj){
+	public virtual void RadiusDetected(GameObject obj){
 		float distance = Vector3.Distance(obj.transform.position, transform.position);
 		if ((closestDistance == -1) || 
 		    (closestDistance != -1 && closestDistance > distance)){
@@ -89,7 +90,7 @@ public class Gunnery : MonoBehaviour {
 		}
 	}
 
-	void OnTriggerStay(Collider other){
+	protected virtual void OnTriggerStay(Collider other){
 		GameObject obj = other.transform.gameObject;
 		if (other.tag == "Enemy"){
 			GameObject self = GetComponent<Collider>().gameObject;
