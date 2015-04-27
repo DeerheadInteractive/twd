@@ -8,7 +8,8 @@ public class PlayerInfo : MonoBehaviour {
 	public GameObject buildMenuPanel;
 	public GameObject towerInfoPanel;
 	public GameObject objectCamera;
-	GameObject player;
+	public GameObject player;
+	public GameObject tooltip;
 	GameController gc;
 
 	string selectedTag;
@@ -65,18 +66,12 @@ public class PlayerInfo : MonoBehaviour {
 	}
 
 	void OnEnable() {
-		upgradeButton.gameObject.SetActive (true);
-		damageBuffButton.gameObject.SetActive (false);
-		slowDebuffButton.gameObject.SetActive (false);
-		cooldownButton.gameObject.SetActive (false);
-		rangeButton.gameObject.SetActive (false);
+		resetButtons();
 
 		if (player) {
 			objectCamera.SetActive (true);
 			newPos = new Vector3 ((float)player.transform.position.x, objectCamera.transform.position.y, (float)player.transform.position.z);
-			Debug.Log ("Move to " + newPos);
 			objectCamera.GetComponent<UIObjectCamera> ().setCameraPosition (newPos);
-			Debug.Log ("moving object camera");
 		} else {
 			Debug.Log ("No player");
 		}
@@ -99,31 +94,20 @@ public class PlayerInfo : MonoBehaviour {
 		if (Physics.Raycast (Camera.main.ScreenPointToRay (mousePos), out hit)) {
 			selectedTag = hit.collider.gameObject.tag;
 			if(hit.collider.gameObject.transform.parent == null) {
-				Debug.Log("no parent");
 				selectedObject = hit.collider.gameObject;
 			}
 			else {
 				selectedObject = hit.collider.gameObject.transform.parent.gameObject;
 			}
-			
-			Debug.Log ("Selected Object Tag: " + selectedTag);
-			
 		}
-
-		Debug.Log ("End of setSelectedObject");
-		
 		return;
 	}
 
 	void updateStats() {
-		Debug.Log ("Updating Player Stats");
-
 		damageBuffText.text = "Damage Buff: " + player.GetComponent<Abilities> ().dmgUp;
 		slowDebuffText.text = "Slow Debuff: " + player.GetComponent<Abilities> ().slowAmount;
 		cooldownText.text = "Cooldown: " + player.GetComponent<Abilities> ().slowCooldown;
 		rangeText.text = "Range: " + player.GetComponent<SphereCollider> ().radius;
-		
-		return;
 	}
 
 	string getSelectedObjectTag() {
@@ -151,18 +135,13 @@ public class PlayerInfo : MonoBehaviour {
 	public void damageBuffButtonClicked() {
 		// Can player afford upgrade?
 		if(!gc.canAfford(player.GetComponent<Abilities>().damageUpgradeValue)) {
-			Debug.Log ("can't afford upgrade");
 			return;
 		}
 		
 		gc.updateMoney (-player.GetComponent<Abilities> ().damageUpgradeValue);
 		player.GetComponent<Abilities> ().upgrade (0);
 		
-		upgradeButton.gameObject.SetActive (true);
-		damageBuffButton.gameObject.SetActive (false);
-		slowDebuffButton.gameObject.SetActive (false);
-		cooldownButton.gameObject.SetActive (false);
-		rangeButton.gameObject.SetActive (false);
+		resetButtons();
 		
 		updateStats ();
 		
@@ -172,18 +151,13 @@ public class PlayerInfo : MonoBehaviour {
 	public void slowDebuffButtonClicked() {
 		// Can player afford upgrade?
 		if(!gc.canAfford(player.GetComponent<Abilities>().slowUpgradeValue)) {
-			Debug.Log ("can't afford upgrade");
 			return;
 		}
 		
 		gc.updateMoney (-player.GetComponent<Abilities> ().slowUpgradeValue);
 		player.GetComponent<Abilities> ().upgrade (1);
 		
-		upgradeButton.gameObject.SetActive (true);
-		damageBuffButton.gameObject.SetActive (false);
-		slowDebuffButton.gameObject.SetActive (false);
-		cooldownButton.gameObject.SetActive (false);
-		rangeButton.gameObject.SetActive (false);
+		resetButtons();
 		
 		updateStats ();
 		
@@ -193,18 +167,13 @@ public class PlayerInfo : MonoBehaviour {
 	public void cooldownButtonClicked() {
 		// Can player afford upgrade?
 		if(!gc.canAfford(player.GetComponent<Abilities>().cooldownUpgradeValue)) {
-			Debug.Log ("can't afford upgrade");
 			return;
 		}
 		
 		gc.updateMoney (-player.GetComponent<Abilities> ().cooldownUpgradeValue);
 		player.GetComponent<Abilities> ().upgrade (2);
 		
-		upgradeButton.gameObject.SetActive (true);
-		damageBuffButton.gameObject.SetActive (false);
-		slowDebuffButton.gameObject.SetActive (false);
-		cooldownButton.gameObject.SetActive (false);
-		rangeButton.gameObject.SetActive (false);
+		resetButtons();
 		
 		updateStats ();
 		
@@ -214,22 +183,26 @@ public class PlayerInfo : MonoBehaviour {
 	public void rangeButtonClicked() {
 		// Can player afford upgrade?
 		if(!gc.canAfford(player.GetComponent<Abilities>().rangeUpgradeValue)) {
-			Debug.Log ("can't afford upgrade");
 			return;
 		}
 		
 		gc.updateMoney (-player.GetComponent<Abilities> ().rangeUpgradeValue);
 		player.GetComponent<Abilities> ().upgrade (3);
 		
+		resetButtons();
+		
+		updateStats ();
+		
+		return;
+	}
+
+	private void resetButtons(){
 		upgradeButton.gameObject.SetActive (true);
 		damageBuffButton.gameObject.SetActive (false);
 		slowDebuffButton.gameObject.SetActive (false);
 		cooldownButton.gameObject.SetActive (false);
 		rangeButton.gameObject.SetActive (false);
-		
-		updateStats ();
-		
-		return;
+		tooltip.SetActive(false);
 	}
 
 	public void backButtonClicked() {

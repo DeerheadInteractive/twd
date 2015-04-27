@@ -22,9 +22,15 @@ public class DebuffGunnery : Gunnery {
 
 	void Update () {
 		foreach (GameObject enemy in inRange){
-			enemy.GetComponent<Vida>().modifySpeed(slowAmount);
+			if (enemy != null)
+				enemy.GetComponent<Vida>().modifySpeed(slowAmount);
 		}
 		inRange.Clear();
+		inRange = new ArrayList();
+		/*
+		if (inRange.Count() > 0)
+			print ("WTF? Debuff inRange did not reset");
+			*/
 	}
 
 	private void updateSphere(){

@@ -88,8 +88,10 @@ public class GameController : MonoBehaviour {
 
 	public void updateWave(){
 		wavenum++;
-		Text txt = waveText.GetComponent<Text>();
-		txt.text = "Wave: " + wavenum;
+		if (waveText != null){
+			Text txt = waveText.GetComponent<Text>();
+			txt.text = "Wave: " + wavenum;
+		}
 	}
 
 	public void launch(){

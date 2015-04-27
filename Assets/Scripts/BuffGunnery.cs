@@ -35,7 +35,7 @@ public class BuffGunnery : Gunnery {
 	/// <summary>
 	/// Shoots a shot at the closest target, if we have a target.
 	/// </summary>
-	void Shoot(){
+	protected override void Shoot(){
 		// If we don't have any objects in range, don't shoot.
 		if (inRange.Count == 0)
 			return;
