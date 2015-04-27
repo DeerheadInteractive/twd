@@ -2,65 +2,40 @@
 using System.Collections;
 
 public class DebuffGunnery : Gunnery {
-	public int targets;
-	public int slowMove;
-	public int slowMoveUpgrade;
-	//int towerNameMark = 1;
 
-	private ArrayList inRange;  
-	//private GameObject closestObj;
-	//private float closestDistance;
+	private GameObject vfxSphere;
+
+	public int targets;
+	public float slowAmount = 0.8f;
+	public float slowUpgrade = -0.1f;
+
+	private ArrayList inRange;
 
 	//private float lastFire;
 
 	void Start () {
 		GetComponent<SphereCollider>().radius = range;
-		lastFire = 0;
+		inRange = new ArrayList();
+		vfxSphere = transform.gameObject.GetComponent<ObjectHolder>().obj1;
+		updateSphere();
 	}
 
 	void Update () {
-		// Fire a shot if we can.
-		/*if (Time.time > lastFire + fireRate){
-			lastFire = Time.time;
-			Shoot();
-		}*/
+		foreach (GameObject enemy in inRange){
+			enemy.GetComponent<Vida>().modifySpeed(slowAmount);
+		}
+		inRange.Clear();
+	}
 
-		// Clear closest distance and object.
-		inRange = new ArrayList();
-		/*foreach (Vida target in inRange) {
-						print ("slowing update");
-						target.speed -= slowMove;
-				}*/
-
+	private void updateSphere(){
+		vfxSphere.transform.localScale = new Vector3(range * 2, range * 2, range * 2);
 	}
 
 	/// <summary>
 	/// Shoots a shot at the closest target, if we have a target.
 	/// </summary>
-	void Shoot(){
-		// If we don't have any objects in range, don't shoot.
-		if (inRange.Count == 0)
-			return;
+	protected override void Shoot(){
 
-		/*foreach(GameObject target in inRange) {
-			Vector3 direction = Vector3.Normalize(transform.position - target.transform.position);
-			GameObject myShot = Instantiate(shot, transform.position, Quaternion.LookRotation(direction)) as GameObject;
-			TargetedMover mover = myShot.GetComponent<TargetedMover>();
-			mover.speed = shotSpeed;
-			mover.target = target;
-			Vida shotVida = myShot.GetComponent<Vida>();
-			shotVida.damage = damage;
-			shotVida.owner = Vida.Owner.FRIENDLY;
-			if (target.tag == "ENEMY")
-			{
-				Vida enemy = GameObject.getComponent<Vida>();
-				enemy.speed = enemy.baseSpeed - slowMove;
-			}
-		}*/
-		/*foreach (Vida target in inRange) {
-			print("slowing shot");
-				target.speed = target.baseSpeed - slowMove;
-		}*/
 	}
 
 	/// <summary>
@@ -76,8 +51,6 @@ public class DebuffGunnery : Gunnery {
 		GameObject obj = other.transform.gameObject;
 		if (other.tag == "Enemy"){
 			RadiusDetected(obj);
-			print("slowing onstay");
-			other.GetComponent<Vida>().speed = other.GetComponent<Vida>().baseSpeed - slowMove;
 		}
 	}
 
@@ -85,13 +58,13 @@ public class DebuffGunnery : Gunnery {
 		switch (choice) {
 			// Upgrade damage
 		case 0:
-			slowMove += slowMoveUpgrade;
-			slowMoveUpgrade *= 2;
+			slowAmount += slowUpgrade;
 			break;
 			// Upgrade range
 		case 1:
 			range += rangeUpgrade;
 			rangeUpgrade *= 2;
+			updateSphere();
 			break;
 		// Upgrade rate of fire
 		case 2:

@@ -115,7 +115,7 @@ public class TowerInfo : MonoBehaviour {
 		towerName.GetComponent<Text> ().text = selectedTower.GetComponent<Gunnery> ().towerName;
 		
 		if (selectedTower.name == "DebuffTower(Clone)") {
-			damageText.GetComponent<Text> ().text = "Slow Rate: " + selectedTower.GetComponent<DebuffGunnery> ().slowMove;
+			damageText.GetComponent<Text> ().text = "Slow Rate: " + ((1.0f - selectedTower.GetComponent<DebuffGunnery>().slowAmount) * 100) + "%";
 		} else {
 			damageText.GetComponent<Text> ().text = "Damage: " + selectedTower.GetComponent<Gunnery> ().damage * selectedTower.GetComponent<Gunnery>().lastDamageMod;
 		}

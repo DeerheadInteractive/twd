@@ -36,6 +36,7 @@ public class MultiShotGunnery : Gunnery {
 			return;
 
 		foreach(GameObject target in inRange) {
+			if (target != null){
 			Vector3 direction = Vector3.Normalize(transform.position - target.transform.position);
 			GameObject myShot = Instantiate(shot, transform.position, Quaternion.LookRotation(direction)) as GameObject;
 			TargetedMover mover = myShot.GetComponent<TargetedMover>();
@@ -44,6 +45,7 @@ public class MultiShotGunnery : Gunnery {
 			Vida shotVida = myShot.GetComponent<Vida>();
 			shotVida.damage = damage;
 			shotVida.owner = Vida.Owner.FRIENDLY;
+			}
 		}
 	}
 

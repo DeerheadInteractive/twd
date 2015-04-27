@@ -47,7 +47,8 @@ public class Vida : MonoBehaviour {
 	}
 
 	public void modifySpeed(float val){
-		speedModifier *= val;
+		speedModifier = speedModifier < val ? speedModifier : val;
+		//print (speedModifier);
 	}
 
 	void OnTriggerEnter(Collider other){

@@ -51,7 +51,7 @@ public class Gunnery : MonoBehaviour {
 	/// <summary>
 	/// Shoots a shot at the closest target, if we have a target.
 	/// </summary>
-	void Shoot(){
+	protected virtual void Shoot(){
 		// If we don't have any objects in range, don't shoot.
 		if (closestObj == null)
 			return;

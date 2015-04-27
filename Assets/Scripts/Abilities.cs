@@ -31,9 +31,6 @@ public class Abilities : MonoBehaviour
 		controller = transform.gameObject.GetComponent<PlayerController> ();
 		highlight = GameObject.FindGameObjectWithTag("AbilityPanel");
 		fader = GameObject.FindGameObjectWithTag("AbilityFader");
-		if (controller == null){
-			print ("Error: Player controller not found.");
-		}
 	}
 
 	void Update () 
@@ -48,6 +45,7 @@ public class Abilities : MonoBehaviour
 			GameObject slowSphere = Instantiate(slowVisualEffect, transform.position, Quaternion.identity) as GameObject;
 			RotateMover mover = slowSphere.GetComponent<RotateMover>();
 			mover.targetRadius = transform.gameObject.GetComponent<SphereCollider>().radius;
+			mover.duration = slowDuration * 0.5f;
 		}
 
 		
@@ -67,7 +65,7 @@ public class Abilities : MonoBehaviour
 
 		// Passive buff
 		foreach (GameObject obj in controller.towersInRange){
-			if (obj.transform.parent != null && obj.transform.parent.gameObject != null){
+			if (obj != null && obj.transform.parent != null && obj.transform.parent.gameObject != null){
 				GameObject parent = obj.transform.parent.gameObject;
 				Gunnery g = parent.GetComponent<Gunnery>();
 				if (g != null){
