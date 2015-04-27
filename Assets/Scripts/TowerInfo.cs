@@ -8,7 +8,7 @@ public class TowerInfo : MonoBehaviour {
 	public GameObject buildMenuPanel;
 	public GameObject playerInfoPanel;
 	public GameObject objectCamera;
-	private GameObject selectedTower;
+	public GameObject selectedTower;
 
 	// Objects for stats panel
 	public GameObject towerName;
@@ -22,7 +22,7 @@ public class TowerInfo : MonoBehaviour {
 	public Button rangeUpgradeButton;
 	public Button rateOfFireUpgradeButton;
 
-	int towerDamage;
+	//int towerDamage;
 	string selectedTag;
 	string selectedTowerName;
 	GameObject selectedObject;
@@ -38,7 +38,7 @@ public class TowerInfo : MonoBehaviour {
 	void Start () {
 		gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
 		towerInfoPanel = this.gameObject;
-		towerDamage = selectedTower.GetComponent<Gunnery> ().damage;
+		//towerDamage = selectedTower.GetComponent<Gunnery> ().damage;
 
 		damageUpgradeButton.gameObject.SetActive (false);
 		slowUpgradeButton.gameObject.SetActive (false);
@@ -74,9 +74,9 @@ public class TowerInfo : MonoBehaviour {
 		if (selectedTower) {
 			objectCamera.SetActive (true);
 			newPos = new Vector3 ((float)selectedTower.transform.position.x, objectCamera.transform.position.y, (float)selectedTower.transform.position.z);
-			Debug.Log ("Move to " + newPos);
+			//Debug.Log ("Move to " + newPos);
 			objectCamera.GetComponent<UIObjectCamera> ().setCameraPosition (newPos);
-			Debug.Log ("moving object camera");
+			//Debug.Log ("moving object camera");
 
 			upgradeButton.gameObject.SetActive(true);
 			damageUpgradeButton.gameObject.SetActive (false);
@@ -89,10 +89,10 @@ public class TowerInfo : MonoBehaviour {
 			selectedTowerName = selectedTower.name;
 
 			// Update stats
-			Debug.Log ("updating stats");
+			//Debug.Log ("updating stats");
 			updateStats ();
 		} else {
-			Debug.Log ("No selectedTower");
+			//Debug.Log ("No selectedTower");
 		}
 	}
 
@@ -103,24 +103,24 @@ public class TowerInfo : MonoBehaviour {
 		if (Physics.Raycast (Camera.main.ScreenPointToRay (mousePos), out hit)) {
 			selectedTag = hit.collider.gameObject.tag;
 			if(hit.collider.gameObject.transform.parent == null) {
-				Debug.Log("no parent");
+				//Debug.Log("no parent");
 				selectedObject = hit.collider.gameObject;
 			}
 			else {
 				selectedObject = hit.collider.gameObject.transform.parent.gameObject;
 			}
 			
-			Debug.Log ("Selected Object Tag: " + selectedTag);
+			//Debug.Log ("Selected Object Tag: " + selectedTag);
 			
 		}
 		
-		Debug.Log ("End of setSelectedObject");
+		//Debug.Log ("End of setSelectedObject");
 		
 		return;
 	}
 
 	void updateStats() {
-		Debug.Log ("Updating Stats");
+		//Debug.Log ("Updating Stats");
 
 		towerName.GetComponent<Text> ().text = selectedTower.GetComponent<Gunnery> ().towerName;
 		
@@ -178,7 +178,7 @@ public class TowerInfo : MonoBehaviour {
 			return;
 		}
 
-		Debug.Log (selectedTower.GetComponent<Gunnery> ().damageUpgradeValue);
+		//Debug.Log (selectedTower.GetComponent<Gunnery> ().damageUpgradeValue);
 
 		gc.updateMoney (-selectedTower.GetComponent<Gunnery> ().damageUpgradeValue);
 		selectedTower.GetComponent<Gunnery> ().upgrade (0);
@@ -208,7 +208,7 @@ public class TowerInfo : MonoBehaviour {
 			return;
 		}
 		
-		Debug.Log (selectedTower.GetComponent<Gunnery> ().slowRateUpgradeValue);
+		//Debug.Log (selectedTower.GetComponent<Gunnery> ().slowRateUpgradeValue);
 		
 		gc.updateMoney (-selectedTower.GetComponent<Gunnery> ().slowRateUpgradeValue);
 		selectedTower.GetComponent<DebuffGunnery> ().upgrade (0);
@@ -232,7 +232,7 @@ public class TowerInfo : MonoBehaviour {
 			return;
 		}
 		
-		Debug.Log (selectedTower.GetComponent<Gunnery> ().rangeUpgradeValue);
+		//Debug.Log (selectedTower.GetComponent<Gunnery> ().rangeUpgradeValue);
 		
 		gc.updateMoney (-selectedTower.GetComponent<Gunnery> ().rangeUpgradeValue);
 		selectedTower.GetComponent<Gunnery> ().upgrade (1);
@@ -262,7 +262,7 @@ public class TowerInfo : MonoBehaviour {
 			return;
 		}
 		
-		Debug.Log (selectedTower.GetComponent<Gunnery> ().rateOfFireUpgradeValue);
+		//Debug.Log (selectedTower.GetComponent<Gunnery> ().rateOfFireUpgradeValue);
 		
 		gc.updateMoney (-selectedTower.GetComponent<Gunnery> ().rateOfFireUpgradeValue);
 		selectedTower.GetComponent<Gunnery> ().upgrade (2);
@@ -294,7 +294,7 @@ public class TowerInfo : MonoBehaviour {
 		//TODO: Increase money here
 		buildMenuPanel.SetActive (true);
 		towerInfoPanel.SetActive (false);
-		Debug.Log ("End of sell");
+		//Debug.Log ("End of sell");
 
 		return;
 	}

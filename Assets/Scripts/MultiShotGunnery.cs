@@ -12,6 +12,7 @@ public class MultiShotGunnery : Gunnery {
 
 	void Start () {
 		GetComponent<SphereCollider>().radius = range;
+		inRange = new ArrayList();
 		lastFire = 0;
 	}
 
@@ -23,7 +24,7 @@ public class MultiShotGunnery : Gunnery {
 		}
 
 		// Clear closest distance and object.
-		inRange = new ArrayList();
+		inRange.Clear();
 	}
 
 	/// <summary>

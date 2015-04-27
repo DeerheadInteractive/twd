@@ -4,7 +4,6 @@ using System.Collections;
 
 public class GameController : MonoBehaviour {
 	public static float CAMERA_HEIGHT = 10;
-	public Animator animator;
 	public GameObject[] enemies;
 	public Vector3[] waypoints;
 	public Queue waveInfo;
@@ -50,9 +49,13 @@ public class GameController : MonoBehaviour {
 	public void updateMonsterCount(int val){
 		monsterCount += val;
 		if (monsterCount < 1){
-			if (curWave != null && curWave.Count < 1 && waveInfo.Count < 1){
-				gameOver = true;
-				GameOver(true);
+			if (curWave != null && curWave.Count < 1){
+			    if (waveInfo.Count < 1){
+					gameOver = true;
+					GameOver(true);
+				} else{
+					StartCoroutine(NextWave());
+				}
 			}
 		}
 	}
@@ -104,7 +107,9 @@ public class GameController : MonoBehaviour {
 			}
 			curWave = (Queue)(waveInfo.Dequeue());
 			updateWave();
-			foreach (Vector3 batchInfo in curWave){
+			while (curWave.Count > 0){
+			//(Vector3 batchInfo in curWave){
+				Vector3 batchInfo = (Vector3)curWave.Dequeue();
 				for (int i = 0; i < batchInfo.y; ++i){
 					if (gameOver)
 						yield break;

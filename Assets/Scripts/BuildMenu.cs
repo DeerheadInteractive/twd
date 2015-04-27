@@ -4,7 +4,8 @@ using System.Collections;
 
 public class BuildMenu : MonoBehaviour {
 
-	public bool singleTarget_isClicked, multiTarget_isClicked, aoe_isClicked, dot_isClicked, debuffSlow_isClicked, waitForInput;
+	//public bool singleTarget_isClicked, multiTarget_isClicked, aoe_isClicked, dot_isClicked, debuffSlow_isClicked,
+	public bool waitForInput;
 	private string selectedTag;
 
 	// Menus
@@ -14,11 +15,11 @@ public class BuildMenu : MonoBehaviour {
 	public GameObject objectCamera;
 
 	// Tower Prefabs
-	GameObject singleTargetTower;
-	GameObject multiTargetTower;
-	GameObject aoeTower;
+	public GameObject singleTargetTower;
+	public GameObject multiTargetTower;
+	public GameObject aoeTower;
 	//GameObject DOTTower;
-	GameObject debuffSlowTower;
+	public GameObject debuffSlowTower;
 	GameObject towerToBuild;
 
 	GameObject selectedObject;
@@ -34,19 +35,6 @@ public class BuildMenu : MonoBehaviour {
 		towerInfoPanel.SetActive (false);
 		playerInfoPanel.SetActive (false);
 
-		// Initialize tower prefabs
-		singleTargetTower = (GameObject)Resources.Load ("Tower");
-		multiTargetTower = (GameObject)Resources.Load ("MultiShotTower");
-		aoeTower = (GameObject)Resources.Load ("AoETower");
-		//DOTTower = (GameObject)Resources.Load ("DOTTower");
-		debuffSlowTower = (GameObject)Resources.Load ("DebuffTower");
-
-		// Initialize bools
-		singleTarget_isClicked = false;
-		multiTarget_isClicked = false;
-		aoe_isClicked = false;
-		//dot_isClicked = false;
-		debuffSlow_isClicked = false;
 		waitForInput = false;
 	}
 	
@@ -58,13 +46,6 @@ public class BuildMenu : MonoBehaviour {
 			switch (waitForInput) {
 			case true:
 				BuildTower();
-
-				singleTarget_isClicked = true;
-				multiTarget_isClicked = false;
-				aoe_isClicked = false;
-				//dot_isClicked = false;
-				debuffSlow_isClicked = false;
-
 				waitForInput = false;
 				break;
 			case false:
@@ -82,26 +63,15 @@ public class BuildMenu : MonoBehaviour {
 					selectedObject = null;
 				}
 				break;
-			/*default:
-				Debug.Log ("this is bad");
-				break;*/
 			}
 		}
 	}
 
 	void OnEnable() {
 		objectCamera.SetActive (false);
-
-		singleTarget_isClicked = true;
-		multiTarget_isClicked = false;
-		aoe_isClicked = false;
-		//dot_isClicked = false;
-		debuffSlow_isClicked = false;
-
-		selectedObject = null;
-
 		towerInfoPanel.SetActive (false);
 		playerInfoPanel.SetActive (false);
+		selectedObject = null;
 	}
 	
 	void setSelectedObject() {
@@ -111,14 +81,14 @@ public class BuildMenu : MonoBehaviour {
 		if (Physics.Raycast (Camera.main.ScreenPointToRay (mousePos), out hit)) {
 			selectedTag = hit.collider.gameObject.tag;
 			if(hit.collider.gameObject.transform.parent == null) {
-				Debug.Log("no parent");
+				//Debug.Log("no parent");
 				selectedObject = hit.collider.gameObject;
 			}
 			else {
 				selectedObject = hit.collider.gameObject.transform.parent.gameObject;
 			}
 
-			Debug.Log ("Selected Object Tag: " + selectedTag);
+			//Debug.Log ("Selected Object Tag: " + selectedTag);
 
 		}
 
@@ -126,17 +96,17 @@ public class BuildMenu : MonoBehaviour {
 	}
 
 	void BuildTower() {
-		Debug.Log ("Entered BuildTower");
-		
+		//Debug.Log ("Entered BuildTower");
+
 		RaycastHit hit = new RaycastHit();
 		
 		Vector3 mousePos = Input.mousePosition;
 		Vector3 offset = new Vector3 (0, 1, 0);
 		
 		if (Physics.Raycast (Camera.main.ScreenPointToRay (mousePos), out hit)) {
-			Debug.Log ("Raycast hit something");
+			//Debug.Log ("Raycast hit something");
 			if (getSelectedObjectTag() == "Wall") {
-				Debug.Log ("Raycast hit Wall");
+				//Debug.Log ("Raycast hit Wall");
 				// Add offset so tower is above walls
 				Instantiate (towerToBuild, hit.transform.position+offset, hit.transform.rotation);
 				
@@ -165,12 +135,6 @@ public class BuildMenu : MonoBehaviour {
 		}
 
 		towerToBuild = singleTargetTower;
-
-		singleTarget_isClicked = true;
-		multiTarget_isClicked = false;
-		aoe_isClicked = false;
-		dot_isClicked = false;
-		debuffSlow_isClicked = false;
 		waitForInput = true;
 	}
 
@@ -182,29 +146,17 @@ public class BuildMenu : MonoBehaviour {
 		}
 
 		towerToBuild = multiTargetTower;
-
-		singleTarget_isClicked = false;
-		multiTarget_isClicked = true;
-		aoe_isClicked = false;
-		dot_isClicked = false;
-		debuffSlow_isClicked = false;
 		waitForInput = true;
 	}
 
 	public void aoeClicked() {
 		// Can player afford the tower?
 		if (!gc.canAfford (aoeTower.GetComponent<Gunnery> ().buyValue)) {
-			Debug.Log("can't afford single target");
+			Debug.Log("can't afford aoe");
 			return;
 		}
-
+		print ("aoe clicked");
 		towerToBuild = aoeTower;
-
-		singleTarget_isClicked = false;
-		multiTarget_isClicked = false;
-		aoe_isClicked = true;
-		dot_isClicked = false;
-		debuffSlow_isClicked = false;
 		waitForInput = true;
 	}
 
@@ -228,17 +180,11 @@ public class BuildMenu : MonoBehaviour {
 	public void debuffSlowClicked() {
 		// Can player afford the tower?
 		if (!gc.canAfford (debuffSlowTower.GetComponent<Gunnery> ().buyValue)) {
-			Debug.Log("can't afford single target");
+			Debug.Log("can't afford debuff");
 			return;
 		}
 
 		towerToBuild = debuffSlowTower;
-
-		singleTarget_isClicked = false;
-		multiTarget_isClicked = false;
-		aoe_isClicked = false;
-		dot_isClicked = false;
-		debuffSlow_isClicked = true;
 		waitForInput = true;
 	}
 	

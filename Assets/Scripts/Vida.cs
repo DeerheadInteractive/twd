@@ -97,6 +97,11 @@ public class Vida : MonoBehaviour {
 				spawnMover.waypoints = parentMover.waypoints;
 				spawnMover.destination = parentMover.destination;
 				spawnMover.hasDestination = parentMover.hasDestination;
+				if (objSpawn.tag == "Enemy"){
+					GameObject gcobj = GameObject.FindGameObjectWithTag("GameController");
+					GameController gc = gcobj.GetComponent<GameController>();
+					gc.updateMonsterCount(1);
+				}
 			} /*else if (obj.tag == "Enemy"){
 				GameController gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
 				gc.updateMonsterCount(-1);

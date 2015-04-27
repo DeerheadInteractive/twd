@@ -19,13 +19,13 @@ public class MainMenu : MonoBehaviour {
 
 	public void Start(){
 		curState = State.MAIN;
-		music.volume = 1.0f;
+		music.volume = Globals.musicVolume;
 		StartCoroutine(startMusic(0.3f));
 	}
 
 	IEnumerator startMusic(float delay){
 		yield return new WaitForSeconds(delay);
-		music.volume = 1.0f;
+		music.volume = Globals.musicVolume;
 		music.Play();
 	}
 

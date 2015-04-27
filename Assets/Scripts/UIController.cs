@@ -8,8 +8,7 @@ public class UIController : MonoBehaviour {
 	public AudioSource confirm;
 	public AudioSource pause;
 
-	private float pausedVolume = 0.35f;
-	private float musicVolume = 0.95f;
+	private float pausedVolume = 0.30f;
 
 	public GameObject tooltip;
 	public GameObject gameOverPanel;
@@ -20,12 +19,14 @@ public class UIController : MonoBehaviour {
 	private bool isSwapping;
 	private State curState;
 
+	private int lastCost;
+
 	private enum State{
 		GAME_OVER, PLAY, TO_LEVEL, TO_MAIN, PAUSE
 	};
 
 	public void Start(){
-		music.volume = musicVolume;
+		music.volume = Globals.musicVolume;
 		curState = State.PLAY;
 		isSwapping = true;
 	}
@@ -66,9 +67,25 @@ public class UIController : MonoBehaviour {
 			// Done swapping
 			isSwapping = false;
 		}
+
+		GameController gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+		if (!gc.canAfford(lastCost))
+			tooltip.GetComponent<ObjectHolder>().obj1.GetComponent<Text>().color = Color.red;
+		else
+			tooltip.GetComponent<ObjectHolder>().obj1.GetComponent<Text>().color = Color.black;
 	}
 
-	public void showTooltip(Vector3 pos, Gunnery gn){
+	public void showTooltip(Vector3 pos, int cost){
+		lastCost = cost;
+		Text txt = 	tooltip.GetComponent<ObjectHolder>().obj1.GetComponent<Text>();
+		txt.text = "Cost: " + cost.ToString();
+		GameController gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+		if (!gc.canAfford(cost))
+			txt.color = Color.red;
+		else
+			txt.color = Color.black;
+		//tooltip.GetComponent<Text>().text = "Cost: " + cost;
+		tooltip.GetComponent<RectTransform>().position = new Vector3(pos.x - 115, pos.y, pos.z);
 		tooltip.SetActive(true);
 	}
 
@@ -90,7 +107,7 @@ public class UIController : MonoBehaviour {
 		//pause.Play();
 		if (curState == State.PAUSE){
 			clickedResume();
-			music.volume = musicVolume;
+			music.volume = Globals.musicVolume;
 		} else if (curState == State.PLAY){
 			pause.Play();
 			curState = State.PAUSE;
