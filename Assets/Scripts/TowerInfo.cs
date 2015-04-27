@@ -9,6 +9,7 @@ public class TowerInfo : MonoBehaviour {
 	public GameObject playerInfoPanel;
 	public GameObject objectCamera;
 	public GameObject selectedTower;
+	public GameObject tooltip;
 
 	// Objects for stats panel
 	public GameObject towerName;
@@ -40,10 +41,7 @@ public class TowerInfo : MonoBehaviour {
 		towerInfoPanel = this.gameObject;
 		//towerDamage = selectedTower.GetComponent<Gunnery> ().damage;
 
-		damageUpgradeButton.gameObject.SetActive (false);
-		slowUpgradeButton.gameObject.SetActive (false);
-		rangeUpgradeButton.gameObject.SetActive (false);
-		rateOfFireUpgradeButton.gameObject.SetActive (false);
+		resetUpgradeButtons();
 	}
 	
 	// Update is called once per frame
@@ -74,22 +72,14 @@ public class TowerInfo : MonoBehaviour {
 		if (selectedTower) {
 			objectCamera.SetActive (true);
 			newPos = new Vector3 ((float)selectedTower.transform.position.x, objectCamera.transform.position.y, (float)selectedTower.transform.position.z);
-			//Debug.Log ("Move to " + newPos);
 			objectCamera.GetComponent<UIObjectCamera> ().setCameraPosition (newPos);
-			//Debug.Log ("moving object camera");
 
-			upgradeButton.gameObject.SetActive(true);
-			damageUpgradeButton.gameObject.SetActive (false);
-			slowUpgradeButton.gameObject.SetActive (false);
-			rangeUpgradeButton.gameObject.SetActive (false);
-			rateOfFireUpgradeButton.gameObject.SetActive (false);
+			resetUpgradeButtons();
 
 			// Change to appropriate tower name
-			//towerName.GetComponent<Text> ().text = selectedTower.GetComponent<Gunnery> ().towerName;
 			selectedTowerName = selectedTower.name;
 
 			// Update stats
-			//Debug.Log ("updating stats");
 			updateStats ();
 		} else {
 			//Debug.Log ("No selectedTower");
@@ -125,7 +115,7 @@ public class TowerInfo : MonoBehaviour {
 		towerName.GetComponent<Text> ().text = selectedTower.GetComponent<Gunnery> ().towerName;
 		
 		if (selectedTower.name == "DebuffTower(Clone)") {
-			damageText.GetComponent<Text> ().text = "Slow Rate: " + selectedTower.GetComponent<DebuffGunnery> ().slowMove;
+			damageText.GetComponent<Text> ().text = "Slow Rate: " + ((1.0f - selectedTower.GetComponent<DebuffGunnery>().slowAmount) * 100) + "%";
 		} else {
 			damageText.GetComponent<Text> ().text = "Damage: " + selectedTower.GetComponent<Gunnery> ().damage * selectedTower.GetComponent<Gunnery>().lastDamageMod;
 		}
@@ -172,83 +162,46 @@ public class TowerInfo : MonoBehaviour {
 	}
 
 	public void damageUpgradeClicked() {
-		// Can player afford upgrade?
 		if(!gc.canAfford(selectedTower.GetComponent<Gunnery>().damageUpgradeValue)) {
-			Debug.Log ("can't afford upgrade");
 			return;
 		}
-
-		//Debug.Log (selectedTower.GetComponent<Gunnery> ().damageUpgradeValue);
-
 		gc.updateMoney (-selectedTower.GetComponent<Gunnery> ().damageUpgradeValue);
-		selectedTower.GetComponent<Gunnery> ().upgrade (0);
 
+		selectedTower.GetComponent<Gunnery> ().upgrade (0);
 		selectedTower.GetComponent<Gunnery> ().damageUpgradeValue += 30;
 
-		upgradeButton.gameObject.SetActive (true);
+		resetUpgradeButtons();
 
-		if (selectedTowerName == "DebuffTower(Clone)") {
-			slowUpgradeButton.gameObject.SetActive (false);
-		} else {
-			damageUpgradeButton.gameObject.SetActive (false);
-		}
-
-		rangeUpgradeButton.gameObject.SetActive (false);
-		rateOfFireUpgradeButton.gameObject.SetActive (false);
-
-		updateStats ();
+		updateStats();
 
 		return;
 	}
 	
 	public void slowRateUpgradeClicked() {
-		// Can player afford upgrade?
 		if(!gc.canAfford(selectedTower.GetComponent<Gunnery>().slowRateUpgradeValue)) {
-			Debug.Log ("can't afford upgrade");
 			return;
 		}
-		
-		//Debug.Log (selectedTower.GetComponent<Gunnery> ().slowRateUpgradeValue);
-		
 		gc.updateMoney (-selectedTower.GetComponent<Gunnery> ().slowRateUpgradeValue);
+
 		selectedTower.GetComponent<DebuffGunnery> ().upgrade (0);
-
 		selectedTower.GetComponent<DebuffGunnery> ().slowRateUpgradeValue += 50;
-		
-		upgradeButton.gameObject.SetActive (true);
-		slowUpgradeButton.gameObject.SetActive (false);
-		rangeUpgradeButton.gameObject.SetActive (false);
-		rateOfFireUpgradeButton.gameObject.SetActive (false);
 
-		updateStats ();
+		resetUpgradeButtons();
 
+		updateStats();
 		return;
 	}
 	
 	public void rangeUpgradeClicked() {
-		// Can player afford upgrade?
 		if(!gc.canAfford(selectedTower.GetComponent<Gunnery>().rangeUpgradeValue)) {
-			Debug.Log ("can't afford upgrade");
 			return;
 		}
-		
-		//Debug.Log (selectedTower.GetComponent<Gunnery> ().rangeUpgradeValue);
-		
 		gc.updateMoney (-selectedTower.GetComponent<Gunnery> ().rangeUpgradeValue);
+
 		selectedTower.GetComponent<Gunnery> ().upgrade (1);
-
 		selectedTower.GetComponent<Gunnery> ().rangeUpgradeValue += 20;
-		
-		upgradeButton.gameObject.SetActive (true);
 
-		if (selectedTowerName == "DebuffTower(Clone)") {
-			slowUpgradeButton.gameObject.SetActive (false);
-		} else {
-			damageUpgradeButton.gameObject.SetActive (false);
-		}
-
-		rangeUpgradeButton.gameObject.SetActive (false);
-		rateOfFireUpgradeButton.gameObject.SetActive (false);
+		resetUpgradeButtons();
 
 		updateStats ();
 
@@ -256,33 +209,28 @@ public class TowerInfo : MonoBehaviour {
 	}
 	
 	public void rateOfFireUpgradeClicked() {
-		// Can player afford upgrade?
 		if(!gc.canAfford(selectedTower.GetComponent<Gunnery>().rateOfFireUpgradeValue)) {
-			Debug.Log ("can't afford upgrade");
 			return;
 		}
-		
-		//Debug.Log (selectedTower.GetComponent<Gunnery> ().rateOfFireUpgradeValue);
-		
 		gc.updateMoney (-selectedTower.GetComponent<Gunnery> ().rateOfFireUpgradeValue);
-		selectedTower.GetComponent<Gunnery> ().upgrade (2);
 
+		selectedTower.GetComponent<Gunnery> ().upgrade (2);
 		selectedTower.GetComponent<Gunnery> ().rateOfFireUpgradeValue += 60;
 
-		upgradeButton.gameObject.SetActive (true);
-
-		if (selectedTowerName == "DebuffTower(Clone)") {
-			slowUpgradeButton.gameObject.SetActive (false);
-		} else {
-			damageUpgradeButton.gameObject.SetActive (false);
-		}
-
-		rangeUpgradeButton.gameObject.SetActive (false);
-		rateOfFireUpgradeButton.gameObject.SetActive (false);
+		resetUpgradeButtons();
 
 		updateStats ();
 
 		return;
+	}
+
+	private void resetUpgradeButtons(){
+		upgradeButton.gameObject.SetActive(true);
+		damageUpgradeButton.gameObject.SetActive (false);
+		slowUpgradeButton.gameObject.SetActive (false);
+		rangeUpgradeButton.gameObject.SetActive (false);
+		rateOfFireUpgradeButton.gameObject.SetActive (false);
+		tooltip.SetActive(false);
 	}
 
 	public void sellButtonClicked() {
