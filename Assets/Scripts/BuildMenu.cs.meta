@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: bf1c3dfa909e83f48b2cfcb109f90892
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - towerInfoPanel: {instanceID: 0}
+  - playerInfoPanel: {instanceID: 0}
+  - objectCamera: {instanceID: 0}
+  - singleTargetTower: {fileID: 145858, guid: 7b7ac70c7acab004ab5235eaed5e8490, type: 2}
+  - multiTargetTower: {fileID: 172244, guid: a0b7ce0847f97c847a8aeeeed7378c63, type: 2}
+  - aoeTower: {fileID: 117770, guid: 08d298cca52822b489f47eb6592486ce, type: 2}
+  - debuffSlowTower: {fileID: 108500, guid: b558b7a9b4cf1fd47b486eb5feed4549, type: 2}
+  - towerToBuild: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
