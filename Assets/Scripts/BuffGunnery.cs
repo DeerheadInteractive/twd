@@ -67,7 +67,7 @@ public class BuffGunnery : Gunnery {
 	/// <param name="obj">An object within firing range</param>
 	/// 
 	public override void RadiusDetected(GameObject obj){
-		//inRange.Add (obj);
+		inRange.Add (obj);
 	}
 
 	protected override void OnTriggerStay(Collider other){
@@ -76,19 +76,19 @@ public class BuffGunnery : Gunnery {
 		GameObject obj = other.transform.gameObject;
 		if (obj.transform.parent == null)
 						return;
-		if (obj.transform.parent.gameObject != null){
-			//print ("something has a parent.");
-			GameObject parent = obj.transform.parent.gameObject;
-			Gunnery g = parent.GetComponent<Gunnery>();
-			if (g != null){
-				//print ("increasing damageMod");	
+//		if (obj.transform.parent.gameObject != null){
+//			print ("something has a parent.");
+//			GameObject parent = obj.transform.parent.gameObject;
+//			Gunnery g = parent.GetComponent<Gunnery>();
+//			if (g != null){
+//				print ("increasing damageMod");	
+//				g.increaseDamageMod(dmgUp);
+//			}
+//		}
+		if (other.tag == "Tower" && obj.transform.parent != null){
+			Gunnery g = obj.transform.parent.gameObject.GetComponent<Gunnery>();
+			if (!g.isCounted)
 				g.increaseDamageMod(dmgUp);
-			}
-		}
-
-		if (other.tag == "Tower"){
-			//print("buffing onstay");
-			//other.GetComponent<Gunnery>().increaseDamageMod(dmgUp);
 		}
 	}
 }
