@@ -34,7 +34,7 @@ public class DebuffGunnery : Gunnery {
 	}
 
 	private void updateSphere(){
-		vfxSphere.transform.localScale = new Vector3(range * 2, range * 2, range * 2);
+		vfxSphere.transform.localScale = new Vector3(range * 2, 2, range * 2);
 	}
 
 	/// <summary>
