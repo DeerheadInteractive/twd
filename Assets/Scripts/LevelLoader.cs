@@ -137,6 +137,8 @@ public class LevelLoader : MonoBehaviour {
 						if (val == _PLAYER){
 							player = (GameObject)Instantiate(playerObj, new Vector3(x, playerHeight, y), Quaternion.identity);
 							playerInfoPanel.GetComponent<PlayerInfo>().setPlayerObject(player);
+							TargetedCamera tc = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<TargetedCamera>();
+							tc.target = player;
 						}
 					}
 				}
