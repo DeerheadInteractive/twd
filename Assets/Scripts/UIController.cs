@@ -12,6 +12,7 @@ public class UIController : MonoBehaviour {
 
 	public GameObject tooltip;
 	public GameObject gameOverPanel;
+	public Text gameOverText;
 	public GameObject pausePanel;
 	public GameObject swapFader;
 	public Animator animator;
@@ -78,7 +79,10 @@ public class UIController : MonoBehaviour {
 	public void showTooltip(Vector3 pos, int cost){
 		lastCost = cost;
 		Text txt = 	tooltip.GetComponent<ObjectHolder>().obj1.GetComponent<Text>();
-		txt.text = "Cost: " + cost.ToString();
+		if (cost > 0)
+			txt.text = "Cost: " + cost.ToString();
+		else
+			txt.text = "Value: " + (-cost).ToString();
 		GameController gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
 		if (!gc.canAfford(cost))
 			txt.color = Color.red;
@@ -95,9 +99,9 @@ public class UIController : MonoBehaviour {
 
 	public void GameOver(bool win){
 		if (win){
-			print ("You won!");
+			gameOverText.text = "You won!";
 		} else{
-			print ("You lost.");
+			gameOverText.text = "You failed...";
 		}
 		animator.SetTrigger("Swap");
 		curState = State.GAME_OVER;
