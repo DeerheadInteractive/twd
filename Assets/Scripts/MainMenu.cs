@@ -7,12 +7,13 @@ public class MainMenu : MonoBehaviour {
 	public AudioSource confirm;
 	public GameObject swapFader;
 	public GameObject selectPanel;
+	public GameObject instrPanel;
 	public Animator animator;
 	private State curState;
 	private string selectedLevel;
 
 	private enum State{
-		MAIN, SELECT, TO_LEVEL
+		MAIN, SELECT, TO_LEVEL, TO_INSTR
 	};
 
 	private bool isSwapping;
@@ -40,15 +41,17 @@ public class MainMenu : MonoBehaviour {
 			animator.SetTrigger("Swap");
 			switch (curState){
 			case State.MAIN:
-				curState = State.SELECT;
-				selectPanel.SetActive(true);
+				selectPanel.SetActive(false);
+				instrPanel.SetActive(false);
 				break;
 			case State.SELECT:
-				curState = State.MAIN;
-				selectPanel.SetActive(false);
+				selectPanel.SetActive(true);
 				break;
 			case State.TO_LEVEL:
 				Application.LoadLevel(1);
+				break;
+			case State.TO_INSTR:
+				instrPanel.SetActive(true);
 				break;
 			}
 		}
@@ -64,15 +67,22 @@ public class MainMenu : MonoBehaviour {
 	public void clickedPlay(){
 		confirm.Play();
 		animator.SetTrigger("Swap");
+		curState = State.SELECT;
 	}
 	public void clickedBack(){
 		confirm.Play();
 		animator.SetTrigger("Swap");
+		curState = State.MAIN;
 	}
 	public void clickedLevel(string name){
 		confirm.Play();
 		animator.SetTrigger("Swap");
 		Globals.levelName = name;
 		curState = State.TO_LEVEL;
+	}
+	public void clickedInstruction(){
+		confirm.Play();
+		animator.SetTrigger("Swap");
+		curState = State.TO_INSTR;
 	}
 }
