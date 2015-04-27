@@ -39,18 +39,11 @@ public class GameController : MonoBehaviour {
 	}
 
 	void Update(){
-		if (!gameOver && Input.GetKeyDown (KeyCode.P)){
-		    isPaused = !isPaused;
-			if (isPaused){
-				// Pause
-				Time.timeScale = 0.0f;
-				animator.SetTrigger("Pause");
-			} else{
-				// Unpause
-				Time.timeScale = 1.0f;
-				animator.SetTrigger("Pause");
-			}
+		if ((Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape)) && !gameOver){
+			UIControllerObject.GetComponent<UIController>().Pause();
 		}
+		
+		Time.timeScale = UIControllerObject.GetComponent<UIController>().isPaused() ? 0.0f : 1.0f;
 	}
 
 
@@ -101,7 +94,6 @@ public class GameController : MonoBehaviour {
 		StartCoroutine(NextWave());
 	}
 
-
 	IEnumerator NextWave(){
 		if (gameOver)
 			yield break;
@@ -133,21 +125,5 @@ public class GameController : MonoBehaviour {
 	public void GameOver(bool win){
 		gameOver = true;
 		UIControllerObject.GetComponent<UIController>().GameOver(win);
-	}
-
-	// Button Handlers ----------------------------------------------------------------
-
-	public void PressedRestart(){
-		Application.LoadLevel(1);
-	}
-
-	public void PressedMainMenu(){
-		Application.LoadLevel(0);
-	}
-
-	public void PressedResume(){
-		isPaused = false;
-		Time.timeScale = 1.0f;
-		animator.SetTrigger("Pause");
 	}
 }
