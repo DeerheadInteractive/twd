@@ -123,9 +123,8 @@ public class Vida : MonoBehaviour {
 		}
 	}
 
-	public void Explode(){
+	public virtual void Explode(){
 		if (explosion != null){
-			print ("Exploding!");
 			GameObject ex = Instantiate(explosion, transform.position, Quaternion.identity) as GameObject;
 			Destroy (ex, deathTimer);
 			

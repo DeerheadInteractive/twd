@@ -3,8 +3,14 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class UIController : MonoBehaviour {
+
 	public AudioSource music;
 	public AudioSource confirm;
+	public AudioSource pause;
+
+	private float pausedVolume = 0.35f;
+	private float musicVolume = 0.95f;
+
 	public GameObject gameOverPanel;
 	public GameObject pausePanel;
 	public GameObject swapFader;
@@ -12,9 +18,6 @@ public class UIController : MonoBehaviour {
 
 	private bool isSwapping;
 	private State curState;
-
-	private float pausedVolume = 0.35f;
-	private float musicVolume = 0.95f;
 
 	private enum State{
 		GAME_OVER, PLAY, TO_LEVEL, TO_MAIN, PAUSE
@@ -80,7 +83,7 @@ public class UIController : MonoBehaviour {
 			clickedResume();
 			music.volume = musicVolume;
 		} else if (curState == State.PLAY){
-			confirm.Play();
+			pause.Play();
 			curState = State.PAUSE;
 			music.volume = pausedVolume;
 			pausePanel.SetActive(true);
@@ -94,7 +97,7 @@ public class UIController : MonoBehaviour {
 	// Button Handlers ----------------------------------------------------
 
 	public void clickedResume(){
-		confirm.Play();
+		pause.Play();
 		curState = State.PLAY;
 		pausePanel.SetActive(false);
 	}
