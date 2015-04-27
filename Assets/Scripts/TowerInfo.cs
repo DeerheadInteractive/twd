@@ -33,7 +33,7 @@ public class TowerInfo : MonoBehaviour {
 	Vector3 mousePos;
 	Vector3 newPos;
 
-	string selectedTowerType; // This will be Tower(Clone) or MultiShotTower(Clone)
+	string selectedTowerType;
 
 	// Use this for initialization
 	void Start () {
@@ -169,6 +169,7 @@ public class TowerInfo : MonoBehaviour {
 
 		selectedTower.GetComponent<Gunnery> ().upgrade (0);
 		selectedTower.GetComponent<Gunnery> ().damageUpgradeValue += 30;
+		selectedTower.GetComponent<Gunnery> ().sellValue += 35;
 
 		resetUpgradeButtons();
 
@@ -185,6 +186,7 @@ public class TowerInfo : MonoBehaviour {
 
 		selectedTower.GetComponent<DebuffGunnery> ().upgrade (0);
 		selectedTower.GetComponent<DebuffGunnery> ().slowRateUpgradeValue += 50;
+		selectedTower.GetComponent<DebuffGunnery> ().sellValue += 35;
 
 		resetUpgradeButtons();
 
@@ -200,6 +202,7 @@ public class TowerInfo : MonoBehaviour {
 
 		selectedTower.GetComponent<Gunnery> ().upgrade (1);
 		selectedTower.GetComponent<Gunnery> ().rangeUpgradeValue += 20;
+		selectedTower.GetComponent<Gunnery> ().sellValue += 35;
 
 		resetUpgradeButtons();
 
@@ -216,6 +219,7 @@ public class TowerInfo : MonoBehaviour {
 
 		selectedTower.GetComponent<Gunnery> ().upgrade (2);
 		selectedTower.GetComponent<Gunnery> ().rateOfFireUpgradeValue += 60;
+		selectedTower.GetComponent<Gunnery> ().sellValue += 35;
 
 		resetUpgradeButtons();
 
