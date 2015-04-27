@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class Abilities : MonoBehaviour 
@@ -21,10 +22,15 @@ public class Abilities : MonoBehaviour
 	public int rangeUpgradeValue;
 	public int cooldownUpgradeValue;
 
+	private GameObject highlight;
+	private GameObject fader;
+
 	void Start () 
 	{
 
 		controller = transform.gameObject.GetComponent<PlayerController> ();
+		highlight = GameObject.FindGameObjectWithTag("AbilityPanel");
+		fader = GameObject.FindGameObjectWithTag("AbilityFader");
 		if (controller == null){
 			print ("Error: Player controller not found.");
 		}
@@ -33,7 +39,7 @@ public class Abilities : MonoBehaviour
 	void Update () 
 	{
 		// Active slow
-		if (Input.GetKeyDown (KeyCode.Q) && curSlowCooldown <= 0) 
+		if (Input.GetKeyDown (KeyCode.Q) && curSlowCooldown < 0f) 
 		{
 			curSlowCooldown = slowCooldown;
 			foreach (GameObject enemy in controller.enemiesInRange){
@@ -43,6 +49,20 @@ public class Abilities : MonoBehaviour
 			RotateMover mover = slowSphere.GetComponent<RotateMover>();
 			mover.targetRadius = transform.gameObject.GetComponent<SphereCollider>().radius;
 		}
+
+		
+		Color c = highlight.GetComponent<Image>().color;
+		Color f = fader.GetComponent<Image>().color;
+		if (curSlowCooldown < 0f){
+			c.a = 1.0f;
+			f.a = 1.0f;
+		} else{
+			c.a = 0.0f;
+			f.a = Mathf.Pow(1.0f - (curSlowCooldown / slowCooldown), 2.0f);
+		}
+		highlight.GetComponent<Image>().color = c;
+		fader.GetComponent<Image>().color = f;
+
 		curSlowCooldown -= Time.deltaTime;
 
 		// Passive buff
