@@ -16,11 +16,15 @@ public class GameController : MonoBehaviour {
 	public GameObject healthText;
 	public GameObject moneyText;
 	public GameObject waveText;
+	public GameObject towerLimitText;
 	public GameObject UIControllerObject;
 
 	public int health;
 	public int money;
 	public int wavenum;
+
+	public int towerLimit = 10;
+	public int maxTowerLimit = 10;
 
 	private bool gameOver = false;
 
@@ -82,6 +86,12 @@ public class GameController : MonoBehaviour {
 		txt.text = "Nanites: " + money;
 	}
 
+	public void updateTowerLimit()
+	{
+		Text txt = towerLimitText.GetComponent<Text> ();
+		txt.text = "Towers available: " + towerLimit + "/" + maxTowerLimit;
+	}
+
 	public bool canAfford(int val){
 		return (money - val) >= 0;
 	}
@@ -105,7 +115,8 @@ public class GameController : MonoBehaviour {
 			if (isFirstWave){
 				// TODO: Display countdown on UI
 				isFirstWave = false;
-				yield return new WaitForSeconds(startWaveDelay);
+				//yield return new WaitForSeconds(startWaveDelay);
+				yield return null;
 			}
 			curWave = (Queue)(waveInfo.Dequeue());
 			updateWave();
@@ -118,7 +129,8 @@ public class GameController : MonoBehaviour {
 					GameObject enemy = Instantiate(enemies[(int)batchInfo.x], waypoints[0], Quaternion.identity) as GameObject;
 					enemy.GetComponent<WaypointMover>().InitializeWaypoints(waypoints);
 					updateMonsterCount(1);
-					yield return new WaitForSeconds(batchInfo.z);
+					//yield return new WaitForSeconds(batchInfo.z);
+					yield return null;
 				}
 			}
 			yield return new WaitForSeconds(waveDelay);
