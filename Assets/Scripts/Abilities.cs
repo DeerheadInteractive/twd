@@ -69,7 +69,7 @@ public class Abilities : MonoBehaviour
 				GameObject parent = obj.transform.parent.gameObject;
 				Gunnery g = parent.GetComponent<Gunnery>();
 				if (g != null){
-					g.increaseDamageMod(dmgUp);
+					g.resetDamageMod(dmgUp);
 					g.isCounted = false;
 				}
 			}

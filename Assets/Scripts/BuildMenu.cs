@@ -111,7 +111,7 @@ public class BuildMenu : MonoBehaviour {
 				Instantiate (towerToBuild, hit.transform.position+offset, hit.transform.rotation);
 				
 				// Update money
-				gc.updateMoney (-towerToBuild.GetComponent<Gunnery> ().buyValue);
+				gc.updateMoney(-towerToBuild.GetComponent<Gunnery>().getBaseCost());
 			}
 		}
 		
@@ -129,7 +129,7 @@ public class BuildMenu : MonoBehaviour {
 	// Functions called by buttons
 	public void singleTargetClicked() {
 		// Can player afford the tower?
-		if (!gc.canAfford (singleTargetTower.GetComponent<Gunnery> ().buyValue)) {
+		if (!gc.canAfford (singleTargetTower.GetComponent<Gunnery>().getBaseCost())) {
 			Debug.Log("can't afford single target");
 			return;
 		}
@@ -140,7 +140,7 @@ public class BuildMenu : MonoBehaviour {
 
 	public void multiTargetClicked() {
 		// Can player afford the tower?
-		if (!gc.canAfford (multiTargetTower.GetComponent<Gunnery> ().buyValue)) {
+		if (!gc.canAfford (multiTargetTower.GetComponent<Gunnery>().getBaseCost())) {
 			Debug.Log("can't afford multi target");
 			return;
 		}
@@ -151,7 +151,7 @@ public class BuildMenu : MonoBehaviour {
 
 	public void aoeClicked() {
 		// Can player afford the tower?
-		if (!gc.canAfford (aoeTower.GetComponent<Gunnery> ().buyValue)) {
+		if (!gc.canAfford (aoeTower.GetComponent<Gunnery>().getBaseCost())) {
 			Debug.Log("can't afford aoe");
 			return;
 		}
@@ -160,26 +160,9 @@ public class BuildMenu : MonoBehaviour {
 		waitForInput = true;
 	}
 
-	/*public void dotClicked() {
-		// Can player afford the tower?
-		if (!gc.canAfford (DOTTower.GetComponent<Gunnery> ().buyValue)) {
-			Debug.Log("can't afford single target");
-			return;
-		}
-
-		towerToBuild = pierceTower;
-
-		singleTarget_isClicked = false;
-		multiTarget_isClicked = false;
-		aoe_isClicked = false;
-		pierce_isClicked = true;
-		debuffSlow_isClicked = false;
-		waitForInput = true;
-	}*/
-
 	public void debuffSlowClicked() {
 		// Can player afford the tower?
-		if (!gc.canAfford (debuffSlowTower.GetComponent<Gunnery> ().buyValue)) {
+		if (!gc.canAfford (debuffSlowTower.GetComponent<Gunnery>().getBaseCost())) {
 			Debug.Log("can't afford debuff");
 			return;
 		}

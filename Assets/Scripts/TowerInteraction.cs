@@ -17,8 +17,8 @@ public class TowerInteraction : MonoBehaviour {
 	// Update is called once per frame
 	void UpdateSelectionIndicatorColor() {
 		float alpha = isSelected ? 0.0f : 1.0f;
-		Color last = selectionIndicator.renderer.material.color;
+		Color last = selectionIndicator.GetComponent<Renderer>().material.color;
 		Color next = new Color(last.r, last.g, last.b, alpha);
-		selectionIndicator.renderer.material.SetColor("_Color", next);
+		selectionIndicator.GetComponent<Renderer>().material.SetColor("_Color", next);
 	}
 }

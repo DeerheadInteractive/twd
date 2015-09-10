@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour {
 		float moveHorizontal = Input.GetAxis("Horizontal");
 		float moveVertical = Input.GetAxis("Vertical");
 		Vector3 move = new Vector3(moveHorizontal, 0, moveVertical);
-		rigidbody.velocity = move * speed;
+		GetComponent<Rigidbody>().velocity = move * speed;
 	}
 
 	void Update() {

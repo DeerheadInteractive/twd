@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Base class for "living" objects, such as bullets and monsters. These objects can be damaged and can deal damage.
+/// </summary>
 public class Vida : MonoBehaviour {
 	public int curHP = 1, maxHP = 1;
 	public int damage = 1;
